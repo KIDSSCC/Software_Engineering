@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>login</title>
+    <link rel="stylesheet" href="/static/register.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="tit">注册</div>
+        <form action="/login" method="post">
+            <input type="text" placeholder="账号" name="account">
+            <input type="password" placeholder="密码" name="passwd">
+            <input type="password" placeholder="确认密码" name="check_passwd">
+            <input type="text" placeholder="姓名" name="name">
+            <button>登录</button>
+            <span>没有账号？<a href="{{url_for('register')}}">去注册</a></span>
+        </form>
+        
+    </div>
+
+    <div class="square">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="circle">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</body>
+
+</html>

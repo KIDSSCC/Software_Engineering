@@ -1,0 +1,266 @@
+/* 顶部导航栏 */
+.header_con {
+    width: 1002px;
+    height: 65px;
+    /* background: pink; */
+    /* 左右居中 */
+    margin: 0 auto;
+    padding-top: 20px;
+}
+/* logo图片 */
+.header_con h1 {
+    width: 300px;
+    height: 66px;
+    /* background: orange; */
+    float: left;
+    padding: 0px 0 0 0px;
+}
+/* 导航标签 */
+.header_con .turn{
+    float: right;
+}
+
+.header_con .turn a,p{
+    color: black;
+    font-size: 14px;
+    margin-top: 22px;
+    display: inline-block;
+}
+/* 几个需要跳转的标签 */
+.turn a:first-child{
+    margin-right: 30px;
+}
+.turn a:nth-child(2){
+    margin-right: 10px;
+}
+.turn p{
+    user-select: none;
+    margin-right:10px;
+}
+.turn a:hover{
+    text-decoration: underline;
+}
+
+/* 内容选择栏 */
+#nav {
+    height: 45px;
+    /* background: rgb(8, 208, 95); */
+}
+#nav .nav_con {
+    width: 1002px;
+    height: 45px;
+    background: rgba(229, 225, 225, 0);
+    margin: 0 auto;
+}
+#nav .nav_con ul{
+    float: left;
+}
+#nav .nav_con li {
+    width: 142px;
+    height: 45px;
+    float: left;
+    font-weight: bold;
+    background:#B3B3E3;
+    /* 左右居中 */
+    text-align: center;
+    /* 上下居中 */
+    line-height: 45px;
+    border-left: 1px solid #ffffff;
+    font-size: 16px;
+}
+.nav_con li a {
+    color: white;
+}
+
+
+.banner_con,
+.news_con,
+.case_con,
+.links_con,
+.footer_con {
+    width: 1002px;
+    margin: 0 auto;
+}
+/* 中间的图片 */
+#banner {
+    height: 400px;
+    background: rgba(255, 255, 255, 0) ;
+}
+
+#banner .banner_con {
+    width: 1000px;
+    height: 400px;
+    /* background: pink; */
+    margin: 0 auto;
+}
+
+/* 动态新闻 */
+.news_con {
+    height: 300px;
+    background: white;
+}
+.news_title {
+    /* background: cadetblue; */
+    font-size: 18px;
+    color: #3f434f;
+    line-height: 18px;
+    padding-top: 30px;
+    font-weight: bolder;
+}
+
+.news_list {
+    /* background: cornflowerblue; */
+    margin-top: 23px;
+}
+
+.news_list li {
+    width: 570px;
+    height: 30px;
+    padding-left: 14px;
+
+    /* margin-top: 23px;不能给li加哦 要给他爹，不然每个儿子顶部都会空出来*/
+}
+.news_list li a {
+    float: left;
+    font-size: 14px;
+    color: #565656;
+    line-height: 25px;
+}
+.news_list li span {
+    float: right;
+    color: #9a9a9a;
+    font-size: 13px;
+}
+.news_l {
+    width: 600px;
+    height: 243px;
+    /* background: rebeccapurple; */
+    float: left;
+    padding-left: 21px;
+}
+.news_l .messageMore{
+    font-size: 12px;
+    float: right;
+    padding-top: 10px;
+}
+.news_r {
+    width: 300px;
+    height: 243px;
+    float: left;
+    padding: 0 38px 0 24px;
+}
+
+.news_r .txt3 {
+    font-size: 14px;
+    color: #585858;
+    line-height: 25px;
+    margin: 21px 0 22px 0;
+    height: 160px;
+}
+.news_r .intrMore{
+    font-size: 12px;
+    float: right;
+    padding-top: 10px;
+}
+
+
+
+.case_con {
+    height: 304px;
+    /* background: goldenrod; */
+}
+
+.case_con h3 {
+    font-size: 20px;
+    font-weight: bolder;
+    color: #3f434f;
+    /* background: pink; */
+    padding: 28px 0 18px 22px;
+}
+
+.case_con .case_box {
+    height: 240px;
+    /* background: orange; */
+}
+
+.case_box dl {
+    width: 210px;
+    /* 这是由图片尺寸为210得出的，这样文本就会屈居于一处 */
+    /* background: burlywood; */
+    float: left;
+    margin: 0 20px;
+}
+
+.case_box dl dt {
+    width: 210px;
+    height: 136px;
+}
+.case_box dl dd {
+    font-size: 12px;
+    color: #4f4f4f;
+    line-height: 24px;
+    margin-top: 13px;
+}
+
+
+/* 上面给dt这个容器指定了宽高，现在让img跟随这个容器的宽高！！ */
+
+.case_box dl dt img {
+    width: 100%;
+    height: 100%;
+}
+
+
+.footer_con {
+    height: 82px;
+    /* background: #cccccc; */
+}
+.footer_con .footer_l {
+    height: 58px;
+    float: left;
+    /* background: red; */
+    padding-top: 24px;
+}
+
+.footer_con .footer_l a {
+    font-size: 12px;
+    float: left;
+    color: #868686;
+    border-right: 1px solid #868686;
+    /* padding:字体和边框的距离哈 */
+    padding: 0 7px;
+    padding-left: 15px;
+}
+
+.footer_con .footer_l .footer-right {
+    border-right: none!important;
+}
+
+.footer_con .footer_r {
+    height: 57px;
+    color: #8a8a8a;
+    font-size: 12px;
+    padding-top: 25px;
+    /* background: pink; */
+    padding-right: 21px;
+    float: right;
+}
+
+
+.block {
+    width: 200px; /* 设置宽度 */
+    height: 200px; /* 设置高度 */
+    background-color: #79A3D3; /* 设置背景颜色 */
+    border: 1px solid rgb(160, 157, 157); /* 设置边框 */
+    border-left: 0px;
+    text-align: center; /* 设置文本居中 */
+    display: inline-block;
+  }
+
+  .block a {
+    color: rgb(255, 255, 255); /* 设置文本颜色 */
+    font-size: 20px; /* 设置文本大小 */
+    font-weight: bold;
+    text-decoration: none; /* 去掉下划线 */
+    line-height: 200px; /* 设置文本垂直居中 */
+  }

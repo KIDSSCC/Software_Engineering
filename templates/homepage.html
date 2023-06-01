@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="/static/homepage_clear.css">
+    <link rel="stylesheet" href="/static/homepage_public.css">
+    <link rel="stylesheet" href="/static/homepage_anim.css">
+</head>
+<body>
+    <!--头部盒子，包含logo和搜索栏-->
+    <div class="header_con">
+        <h1>
+            <img src="/static/pic/homepage_logo.png" alt="" >
+        </h1>
+        <div class="turn">
+            <a href="https://www.neea.edu.cn/">中国教育考试网</a>
+            <a href="{{url_for('login')}}">登录</a>
+            <p>|</p>
+            <a href="{{url_for('register')}}">注册</a>
+        </div>
+    </div>
+
+    <!--导航栏背景-->
+    <div id="nav">
+        <div class="nav_con">
+            <ul>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">考试动态</a></li>
+                <li><a href="#">CET委员会</a></li>
+                <li><a href="#">考试大纲</a></li>
+                <li><a href="#">考核内容</a></li>
+                <li><a href="#">分数解释</a></li>
+                <li><a href="#">常见问题</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- banner的平铺部分 -->
+    <div id="banner">
+        <div class="banner_con">
+            <img src="/static/pic/homepage_banner.jpg" alt="" width="1000" height="400">
+        </div>
+    </div>
+
+    <!-- 新闻列表的模块 -->
+    <div class="news_con">
+        <!-- 左边盒子 -->
+        <div class="news_l">
+            <h3 class="news_title">考试动态</h3>
+            <ul class="news_list">
+                <li>
+                    <a>2022年下半年全国大学英语四、六级考试加考(3月)成绩查询...</a>
+                    <span>2023-04-21</span>
+                </li>
+                <li>
+                    <a>2023年上半年全国大学英语四、六级考试报名工作启动</a>
+                    <span>2023-03-27</span>
+                </li>
+                <li>
+                    <a>2022年下半年(12月)全国大学英语四、六级考试(CET)成绩查询...</a>
+                    <span>2023-02-17</span>
+                </li>
+                <li>
+                    <a>2022年上半年第二次（9月）全国大学英语四、六级考试成绩查询...</a>
+                    <span>2022-10-24</span>
+                </li>
+                <li>
+                    <a>2022年下半年全国大学英语四、六级考试报名工作启动</a>
+                    <span>2022-09-13</span>
+                </li>
+                <li>
+                    <a>2022上半年(6月)全国大学英语四、六级考试(CET)成绩查询...</a>
+                    <span>1998-09-15</span>
+                </li>
+            </ul>
+            <div class="messageMore">
+                <a href="#">更多>></a>
+            </div>
+        </div>
+        <div class="news_r">
+            <h3 class="news_title">项目介绍</h3>
+            <p class="txt3">这里可能需要一段很长很长的文本，在这里需要的只是一个简介，打算从项目计划书
+                中抄，但是现在还不知道抄什么，为了测试长文本能够正常显示，所以在这里写废话占下地方。
+            </p>
+            <div class="intrMore">
+                <a href="#">更多>></a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 考生快捷服务 -->
+    <div class="case_con">
+        <h3>考生快捷服务</h3>
+        <div class="block">
+            <a href=#>在线报名</a>
+        </div>
+        <div class="block">
+            <a href=#>成绩查询</a>
+        </div>
+        <div class="block">
+            <a href=#>成绩证明</a>
+        </div>
+        <div class="block">
+            <a href=#>准考证打印</a>
+        </div>
+    </div>
+    <!-- <div class="case_con">
+        <h3>考生服务</h3>
+        <div class="case_box">
+            <dl>
+                <dt><img src="./images/case1_05.jpg" alt=""></dt>
+                <dd>有一说一，这个点了，不会还有人在写作业吧</dd>
+            </dl>
+            <dl>
+                <dt><img src="./images/case1_05.jpg" alt=""></dt>
+                <dd>有一说一，这个点了，不会还有人在写作业吧</dd>
+            </dl>
+            <dl>
+                <dt><img src="./images/case1_05.jpg" alt=""></dt>
+                <dd>有一说一，这个点了，不会还有人在写作业吧</dd>
+            </dl>
+            <dl>
+                <dt><img src="./images/case1_05.jpg" alt=""></dt>
+                <dd>有一说一，这个点了，不会还有人在写作业吧</dd>
+            </dl>
+        </div>
+    </div> -->
+
+
+    <!-- 页脚 -->
+    <div class="footer_con">
+        <!-- 页脚左边的盒子 -->
+        <p class="footer_l">
+            <a href="#" class="footer-right">建议您使用IE11，Edge，Chrome，Firefox，360等主流浏览器浏览本网站</a>
+        </p>
+        <!-- 页脚右边的盒子 -->
+        <p class="footer_r">
+            南开大学计算机学院&nbsp;&nbsp;&nbsp;软件工程期末设计作业
+        </p>
+    </div>
+
+
+    <div class="square">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="circle">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</body>
+</html>

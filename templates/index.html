@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <style>
+      body {
+        background-image: linear-gradient(to bottom right, #5f2c82, #49a09d);
+      }
+      input[type="text"], input[type="password"] {
+        border-radius: 10px;
+        padding: 5px;
+        border: none;
+        outline: none;
+        box-shadow: 0px 0px 5px grey;
+      }
+      input[type="submit"] {
+        border-radius: 10px;
+        padding: 5px;
+        background-color: lightblue;
+        color: white;
+        border: none;
+        outline: none;
+        box-shadow: 0px 0px 5px grey;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>欢迎来到登录页面</h2>
+    <form action="/index" method="post">
+      <label for="username">用户名:</label>
+      <input type="text" id="username" name="username"><br><br>
+      <label for="password">密码:</label>
+      <input type="password" id="password" name="password"><br><br>
+      <input type="submit" value="提交">
+    </form>
+  </body>
+</html>
