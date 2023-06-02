@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
     <title>login</title>
-    <link rel="stylesheet" href="/static/register.css">
+    <link rel="stylesheet" href="/static/login.css">
 </head>
 
 <body>
     <div class="container">
-        <div class="tit">注册</div>
-        <form action="/register" method="post">
+        <div class="tit">登录</div>
+        <form action="/login" method="post">
             <select name="type">
                 <option value="0">学生用户</option>
                 <option value="1">教师用户</option>
@@ -20,12 +20,14 @@
             </select>
             <input type="text" placeholder="账号" name="account">
             <input type="password" placeholder="密码" name="passwd">
-            <input type="password" placeholder="确认密码" name="check_passwd">
-            <input type="text" placeholder="姓名" name="name">
-            <button>注册</button>
-            <span>已经注册? <a href="{{url_for('login')}}">去登录</a></span>
+            <button>登录</button>
+            <span>没有账号？<a href="{{url_for('register')}}">去注册</a></span>
+            <div class="forget">
+                <a href="#">忘记密码？</a>
+            </div>
+
         </form>
-        
+
     </div>
 
     <div class="square">
