@@ -1,6 +1,7 @@
 body{
     /* 渐变背景 */
-    background: linear-gradient(200deg,#e3c5eb,#a9c1ed);
+    /*background: linear-gradient(200deg,#e3c5eb,#a9c1ed);*/
+    background:linear-gradient(135deg,#e3c5eb,#a9c1ed);
     /* 溢出隐藏 */
     /* overflow: hidden; */
 }

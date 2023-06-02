@@ -1,0 +1,125 @@
+<html>
+
+<head>
+    <title>Student</title>
+    <link rel="stylesheet" href="/static/style.css" type="text/css" />
+</head>
+
+<body class="body">
+    <!-- 左侧导航栏   -->
+    <div class="cbl">
+        <div class="cblcenter">
+            <div class="sign">
+                学生主页
+            </div>
+
+
+            <div id="userlogin" style="display: {{loginvi}};">
+                <form action="/signin" method="post" style="text-align: left;">
+                    <legend style="text-align: center;color: white;">用户登录</legend>
+                    <div style="color:red;font-size: 15px;text-align: center;">{{error}}</div>
+                    <div class="inputclass">
+                        用户名
+                        <input class="inputbox" name="username" placeholder="Username">
+                    </div>
+                    <div class="inputclass">
+                        密码
+                        <input class="inputbox" name="password" placeholder="Password" type="password">
+                    </div>
+                    <div class="inputclass">
+                        <button class="inputbutton" type="submit">登录</button>
+                    </div>
+                </form>
+            </div>
+            <div class="copyright">©2023 SB</div>
+        </div>
+    </div>
+
+
+    <div class="content">
+        <div class="animation">
+            <div class="square">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="circle">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="topbar">
+            <div id="userstatus" style="display: {{statusvi}};">
+                <div class="greet">
+                    {{greeting}}，{{username}}！
+                </div>
+                <div class="inputclass">
+                    <form action="/login" method="post" >
+                        <button class="inputbutton" type="submit">登出</button>
+                    </form>
+                    <form action="/changepwd" method="post">
+                        <button class="inputbutton" type="submit">修改密码</button>
+                    </form>
+
+                </div>
+            </div>
+            <a href="/admin" id="management" style="display:{{typevi}};">管理中心</a>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="tittlebar">
+            <span class="tittle">正在进行的测试</span>
+            <div class="line"></div>
+        </div>
+        <div style="min-height: 140px;margin:0px 20px 0px 20px;">{% for i in testnow_list %}
+            <a href="/test/{{ i[0] }}" class="testbox">
+                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">{{ i[0] }}</div><br>
+                <div style="font-size:15px;">开始时间：{{i[1]}}</div>
+                <div style="font-size:15px;">时长限制：{{i[2]}}分钟</div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="tittlebar"><span class="tittle">曾经参加的测试</span>
+            <div class="line"></div>
+        </div>
+        <div style="min-height: 140px;margin:0px 20px 0px 20px;">{% for i in testhistory_list %}
+            <a href="/result/{{ i[0] }}" class="testbox">
+                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">{{ i[0] }}</div>
+                <div style="font-size:15px;margin-top:10px;">答卷时间：{{i[1]}}</div>
+                <div style="font-size:15px;">时长限制：{{i[2]}}分钟</div>
+                <div style="font-size:15px;">测试状态：{{i[3]}}</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+
+</html>

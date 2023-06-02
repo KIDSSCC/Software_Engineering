@@ -53,6 +53,8 @@ body{
     font-size: 14px;
     outline: none;
     margin: 12px auto;
+    border-radius: 10px;
+
 }
 .container input{
     width: 280px;
