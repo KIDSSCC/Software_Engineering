@@ -12,13 +12,18 @@
 <body>
     <div class="container">
         <div class="tit">注册</div>
-        <form action="/login" method="post">
+        <form action="/register" method="post">
+            <select name="type">
+                <option value="student">学生用户</option>
+                <option value="teacher">教师用户</option>
+                <option value="Administrator">管理员用户</option>
+            </select>
             <input type="text" placeholder="账号" name="account">
             <input type="password" placeholder="密码" name="passwd">
             <input type="password" placeholder="确认密码" name="check_passwd">
             <input type="text" placeholder="姓名" name="name">
-            <button>登录</button>
-            <span>没有账号？<a href="{{url_for('login')}}">去注册</a></span>
+            <button>注册</button>
+            <span>已经注册<a href="{{url_for('login')}}">去登录</a></span>
         </form>
         
     </div>

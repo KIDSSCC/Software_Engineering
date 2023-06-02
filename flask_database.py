@@ -74,7 +74,7 @@ def register():
         check_passwd=request.form.get('check_passwd')
         if passwd !=check_passwd:
             # todo something
-            return redirect(url_for("login"))
+            return redirect(url_for("register"))
         name=request.form.get('name')
         student_n=Student(account=account,passwd=passwd,name=name)
         db.session.add(student_n)
