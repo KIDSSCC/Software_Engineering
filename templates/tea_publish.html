@@ -1,0 +1,153 @@
+<html>
+
+<head>
+    <title>Home Page——Project OTS</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <link rel="stylesheet" href="../static/Stu_page.css" type="text/css">
+    <script src="/static/jquery-easyui-1.10.16/jquery.min.js"></script>
+</head>
+
+<body class="body">
+    <!-- 左侧导航栏   -->
+    <div class="cbl">
+        <div class="cblcenter">
+            <div class="sign">
+                <em>教师主页</em>
+            </div>
+            <div class="nav_con">
+                <a href="#">个人信息</a>
+                <a href="#">题库管理</a>
+                <a href="#">我的学生</a>
+            </div>
+        </div>
+        <div class="copyright">©2023 南开大学 软件工程</div>
+    </div>
+    </div>
+    <div class="content">
+        <div class="square">
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+        <div class="circle">
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div><a href="/admin" id="back">&lt;</a>
+        <div class="tittlebar">
+            <span class="tittle">教師管理：題庫上傳</span>
+            <div class="line"></div>
+        </div>
+        <div class="questionbox">
+            <div class="line"></div>
+            <div class="list">
+                <span class="column" style="width:25;">ID</span>
+                <span class="column" style="width:100;">题库名</span>
+                <span class="column" style="width:150;">数据库文件名</span>
+                <span class="column" style="width:100;">数据库密码</span>
+                <span class="column" style="width:250;">操作</span>
+                <span class="column" style="width:70;">结果</span>
+            </div>
+            <form class="list" id="题库管理*" action="/watch/题库管理" method="POST">
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input readonly="readonly"
+                        name="ID" style="border:none;height:33px;width:25;" placeholder="Add new" value="*"></div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input name="题库名"
+                        style="border:none;height:33px;width:100;" placeholder="Add new" value=""></div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input name="数据库文件名"
+                        style="border:none;height:33px;width:150;" placeholder="Add new" value=""></div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input name="数据库密码"
+                        style="border:none;height:33px;width:100;" placeholder="Add new" value=""></div>
+                <div class="column" style="width:250;">
+                    <button type="button" name="operate" class="operater" id="*" value="添加">添加</button>
+                </div>
+                <div id="result" class="column" style="width:70;font-size:16px;"></div>
+            </form>
+            <form class="list" id="题库管理1" action="/watch/题库管理" method="POST">
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input readonly="readonly"
+                        name="ID" style="border:none;height:33px;width:25;" placeholder="Add new" value="1"></div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input name="题库名"
+                        style="border:none;height:33px;width:100;" placeholder="Add new" value="test1"></div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input name="数据库文件名"
+                        style="border:none;height:33px;width:150;" placeholder="Add new" value="fjwof"></div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;"><input name="数据库密码"
+                        style="border:none;height:33px;width:100;" placeholder="Add new" value="root"></div>
+                <div class="column" style="width:250;">
+                    <button type="button" name="operate" class="operater" id="1" value="更新">更新</button>
+                    <button type="submit" name="operate" class="operater" id="1" value="查看">查看</button>
+                    <button type="button" name="operate" class="operater" id="1" value="删除">删除</button>
+                </div>
+                <div id="result" class="column" style="width:70;font-size:16px;">载入完毕</div>
+            </form>
+            <div style="height:0px;" id="insertxy"></div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", "button[id][name='operate']", function () {
+                if ($(this).val() != "查看" && $(this).val() != "成绩") {
+                    su = this;
+                    $.post("/operate/{{managetool}}", $(this).parent().parent().serialize() + "&" + this.name + "=" + this.value, function (data, status) {
+                        if ($(su).val() == "更新") {
+                            $(su).parent().nextAll("#result").html(data);
+                        }
+                        else if ($(su).val() == "删除") {
+                            $(su).parent().nextAll("#result").html(data);
+                            if (data != "删除失败") {
+                                ca = $(su).parent().parent()
+                                ca.children().remove()
+                                lll = setInterval(function () {
+                                    if (ca.css("opacity") != 0) {
+                                        ca.css("opacity", ca.css("opacity") - 0.1);
+                                    }
+                                    else if (ca.height() != 0) {
+                                        ca.height(ca.height() - 1);
+                                    }
+                                    else {
+                                        ca.remove();
+                                        clearInterval(lll);
+                                    }
+                                }, 10);
+                            };
+                        }
+                        else if ($(su).val() == "添加" || $(su).val() == "添加并开始") {
+                            if (data != "添加失败") {
+                                $('#insertxy').before(data);
+                                $(su).parent().nextAll("#result").html("添加成功");
+                            }
+                            else { $(su).parent().nextAll("#result").html(data); };
+                        }
+                        else if ($(su).val() == "开始") {
+                            if (data != "操作失败") {
+                                $(su).html("结束");
+                                $(su).val("结束");
+                                $(su).parent().parent().find("[name='状态']").val("正在进行");
+                            };
+                            $(su).parent().nextAll("#result").html(data);
+                        }
+                        else if ($(su).val() == "结束") {
+                            if (data != "操作失败") {
+                                $(su).html("开始");
+                                $(su).val("开始");
+                                $(su).parent().parent().find("[name='状态']").val("已结束");
+                            };
+                            $(su).parent().nextAll("#result").html(data);
+                        };
+                    });
+                }
+                else {
+                    // $(this).parent().parent().submit();
+                };
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../static/jquery-easyui-1.10.16/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../static/jquery-easyui-1.10.16/themes/icon.css">
+    <script src="../static/jquery-easyui-1.10.16/jquery.min.js" type="text/javascript"></script>
+    <script src="../static/jquery-easyui-1.10.16/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="toastr.min.js" type="text/javascript"></script>
+    <script src="toastr.min.css" type="text/css"></script>
+</head>
+<body>
+    <div id="zc_main" class="" style="height:auto;">
+        <div id="zc_title" class="cen"><h1>资格信息确认</h1></div>
+
+        <div id="zc_xin_room">
+
+            <div class="alert alert-info alert-dismissable f14 lineHeight2em">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                <ul>
+                    <li> <span style="color:red;"><strong>提示：</strong></span></li>
+                    <li> 1、如果发现学籍信息有误，请勿继续报考，尽快联系学校相关负责老师进行处理。</li>
+                    <li> 2、资格科目是综合当前考次的设置信息而生成的，如有异议，请联系学校相关负责老师。</li>
+                    <li> 3、资格科目为无的考生无法继续报名。</li>
+                    <li>
+                        4、<font color="red"><b>如暂时无法报考口试，可能是由于机位已满或考点暂未开放，完成笔试报考及缴费后，可随时登录系统查看可否进行口试报考。</b></font>
+                    </li>
+                </ul>
+
+
+
+            </div>
+
+            <div id="divStuentInfo">
+                <table class="ufo_table_02" width="100%" border="0" cellspacing="0" cellpadding="0" style="width: 827px;margin-bottom: 20px;margin-top:25px;margin-left:3px;">
+                    <tbody><tr>
+                        <td width="130">
+                            <img class="zp" style="height: 160px; width: 120px; " id="imgPhotoShow" src="../Student/Show?r=0.22239591144990212">
+                        </td>
+                        <td>
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tbody><tr style="height: 30px;">
+                                    <td class="lz_td1" align="right"><span>姓　　名：</span></td>
+                                    <td class="lz_td2"><span id="lblName">星穹铁道</span></td>
+                                </tr>
+                                <tr style="height: 30px;">
+                                    <td class="lz_td1" align="right"><span>性　　别：</span></td>
+                                    <td class="lz_td2"><span id="lblGender">男</span></td>
+                                </tr>
+                                <tr style="height: 30px;">
+                                    <td class="lz_td1" align="right"><span>证件类型：</span></td>
+                                    <td class="lz_td2"><span id="lblIDType">中华人民共和国居民身份证</span></td>
+                                </tr>
+                                <tr style="height: 30px;">
+                                    <td class="lz_td1" align="right"><span>证件号码：</span></td>
+                                    <td class="lz_td2"><span id="lblIDNumber">120105yyyymmddxxxx</span></td>
+                                </tr>
+                                <tr style="height: 30px;">
+                                    <td class="lz_td1" align="right"><span>资格科目：</span></td>
+                                    <td class="lz_td2"><span id="lblIDNumber" title="CET6、CJT4、CJT6、CGT4、CGT6、CRT4、CRT6、CFT4、CET-SET6">英语六级笔试；日语四级笔试；日语六级笔试；德语四级笔试；德语六级笔试；俄语四级笔试；俄语六级笔试；法语四级笔试；英语六级口试</span></td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                </tbody></table>
+
+
+                <div class="zc_a_box">
+
+                    <div class="zc_a_box_title" id="">学籍信息</div>
+
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+
+                            <table class="table table-bordered table-hover table-striped table-condensed" border="0" style="line-height:50px;">
+                                <tbody><tr>
+                                    <td class="lz_td1">笔试报名学校：</td>
+                                    <td class="lz_td2" colspan="3">(12001)南开大学</td>
+                                </tr>
+                                <tr>
+                                    <td class="lz_td1">笔试报名校区：</td>
+                                    <td class="lz_td2" colspan="3">(120013)南开大学本科生津南校区</td>
+                                </tr>
+
+
+                                <tr>
+                                    <td colspan="4">&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="lz_td1">学　　历：</td>
+                                    <td class="lz_td2">本科</td>
+                                    <td class="lz_td1">学　　制：</td>
+                                    <td class="lz_td2">4</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="lz_td1">入学年份：</td>
+                                    <td class="lz_td2">20</td>
+                                    <td class="lz_td1">年　　级：</td>
+                                    <td class="lz_td2">20</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="lz_td1">院　　系：</td>
+                                    <td class="lz_td2">计算机学院</td>
+                                    <td class="lz_td1">专　　业：</td>
+                                    <td class="lz_td2">计算机科学与技术</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="lz_td1">班　　级：</td>
+                                    <td class="lz_td2">1</td>
+                                    <td class="lz_td1">学　　号：</td>
+                                    <td class="lz_td2">2012202</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="lz_td1">备　　注：</td>
+                                    <td class="lz_td2" colspan="3"></td>
+                                </tr>
+
+                            </tbody></table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+                <div class="zc_goux md-checkbox-inline">
+                    <div class="md-checkbox" style="margin:0px;" title="如勾选按钮无法点击，说明浏览器不兼容，请使用首页推荐浏览器">
+                        <input id="chkAssure" class="md-check" type="checkbox" autocomplete="off">
+                        <label for="chkAssure">
+                            <span></span>
+                            <span class="check"></span>
+                            <span class="box"></span>
+                        </label>
+                    </div>
+                    <span class="r" style="padding: 0 10px 0 0;">*</span>我已检查并确认学籍与资格信息正确
+                </div>
+                <div align="center">
+                    <table width="90%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody><tr>
+                            <td width="50%" align="center">
+                                <a id="btnDisagree" class="zc_button" style="text-decoration:none;" onclick="toIndex()">返回首页</a>
+                            </td>
+
+                            <td width="50%" align="center">
+                                <div id="divAgree" style="display: none;">
+                                    <a id="btnAgree" class="zc_button" style="text-decoration:none;" onclick="toSaveAndContinue()">保存并继续</a>
+                                </div>
+                                <span id="spanAgree" class="zc_button" style="display: block;">请勾选确认</span>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </div>
+
+            <br>
+
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        var passportMobile = '15648611412'.toUpperCase();
+        var passportIDNumber = '120105yyyymmddxxxx'.toUpperCase();
+        var passportName = '星穹铁道'.toUpperCase();
+        var idnumber = '120105yyyymmddxxxx';
+        var name = '星穹铁道';
+        $(function () {
+            $("#imgPhotoShow").attr('src', '../Student/Show?r=' + Math.random());
+            if ($('#chkAssure').is(':checked')) {
+                $('#spanAgree').hide();
+                $('#divAgree').show();
+            }
+            else {
+                $('#spanAgree').show();
+                $('#divAgree').hide();
+            }
+            var disabledApplyEndTime = '2023-05-24 20:00';
+            if ('False'.toUpperCase() == 'TRUE') {
+                toastr.info('如需申请残疾考生合理便利，请在报名并缴费成功后，残疾考生合理便利申请截止日期（' + disabledApplyEndTime + '）前，携带本人的第二代及以上《中华人民共和国残疾人证》及身份证件原件和复印件到本考点有关部门办理。<br/><br/>', '提示：<br/><br/>', {
+                    closeButton: true,
+                    positionClass: "toast-top-full-width",
+                    iconClass: 'toast-pink',
+                    timeOut: "7000"
+                });
+            }
+        });
+
+        $('#chkAssure').click(function () {
+            if ($('#chkAssure').is(':checked')) {
+                $('#spanAgree').hide();
+                $('#divAgree').show();
+            }
+            else {
+                $('#spanAgree').show();
+                $('#divAgree').hide();
+            }
+        });
+
+        function cet6Audit() {
+              if ('False'.toUpperCase() == 'TRUE') {
+                $.messager.alert('提示', '2022年国庆假期期间（10月1日-7日）暂停报名服务，10月8日8:00恢复。', 'info');
+                return;
+            }
+            showBootstrapModalDialog('../Student/DetailsQA?psid=' + $("#hidPassprotSID").val() + '&r=0', 800, 550);
+        }
+
+
+        function toIndex() {
+            $.messager.confirm('提示', '返回首页？', function (r) {
+                if (r) {
+                    location.href = '../Student/Index';
+                }
+            });
+        };
+        function toSaveAndContinue() {
+              if ('False'.toUpperCase() == 'TRUE') {
+                $.messager.alert('提示', '2022年国庆假期期间（10月1日-7日）暂停报名服务，10月8日8:00恢复。', 'info');
+                return;
+            }
+
+            if (!$('#chkAssure').is(':checked')) {
+                $.messager.alert('提示', '请先勾选“我已检查并确认学籍与资格信息正确”！', 'warning');
+                return;
+            }
+
+            if (passportMobile.length == 0) {
+                $.messager.alert('提示', '当前登录通行证账号还没有在“通行证系统”中绑定“手机号”，需先登录通行证网站（<a href="https://passport.neea.edu.cn">https://passport.neea.edu.cn</a>）绑定后，再重新登录报名网站，才可继续报名。', 'error');
+                return;
+            }
+            $.messager.confirm('提示', '当前登录通行证账号绑定“手机号”为“<font color="red">' + passportMobile +'</font>”，如<font color="red">非本人号码</font>或<font color="red">号码已不再使用</font>，请先登录通行证网站（<a href="https://passport.neea.edu.cn">https://passport.neea.edu.cn</a>）<font color="red">修改为本人正在使用的手机号后，再重新登录报名网站报名</font>。<br/>确认手机号为本人正在使用并继续？', function (r0) {
+                if (r0) {
+                    if (passportIDNumber && idnumber != passportIDNumber) {
+                        $.messager.confirm('提示', '证件号码“' + idnumber + '”与当前登录通行证绑定的证件号“' + passportIDNumber + '”不一致。确认继续？', function (r1) {
+                            if (r1) {
+                                if (passportName && name != passportName) {
+                                    $.messager.confirm('提示', '姓名“' + name + '”与当前登录通行证绑定的姓名“' + passportName + '”不一致。确认继续？', function (r2) {
+                                        if (r2) {
+                                            confirmSaveAndContinue();
+                                        }
+                                    });
+                                }
+                                else {
+                                    confirmSaveAndContinue();
+                                }
+                            }
+                        });
+                    }
+                    else if (passportName && name != passportName) {
+                        $.messager.confirm('提示', '姓名“' + name + '”与当前登录通行证绑定的姓名“' + passportName + '”不一致。确认继续？', function (r2) {
+                            if (r2) {
+                                confirmSaveAndContinue();
+                            }
+                        });
+                    }
+                    else {
+                        confirmSaveAndContinue();
+                    };
+                }
+            });
+        };
+        function confirmSaveAndContinue() {
+            $.messager.confirm('提示', '保存成功后，学籍信息将<font color="red">无法修改</font>。<br/>如果信息<font color="red">有误</font>，请<font color="red">先联系学校老师</font>修正，以免影响参加<font color="red">考试</font>和<font color="red">成绩单/证书</font>信息。<br/>确认学籍信息无误并继续？', function (r) {
+                 if (r) {
+                    $('#btnAgree').removeAttr('onclick');
+                    $('#btnDisagree').removeAttr('onclick');
+                    $.ajax({
+                        type: "post",
+                        url: '../Student/AddCandidate',
+                        data: {
+                            IDNumber: '120105yyyymmddxxxx', PassPortSID: '4FA9DA732714484BB769A28703680B9F',
+                            __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                        },
+                        success: function (data) {
+                            switch (data.ExceuteResultType) {
+                                case -1:
+                                    toastr.error(data.Message, '错误');
+                                    $('#btnAgree').attr("onclick", "toSaveAndContinue()");
+                                    $('#btnDisagree').attr("onclick", "toIndex()");
+                                    break;
+                                case 0:
+                                    toastr.error('保存失败，执行无结果！', '错误');
+                                    $('#btnAgree').attr("onclick", "toSaveAndContinue()");
+                                    $('#btnDisagree').attr("onclick", "toIndex()");
+                                    break;
+                                case 1: $.messager.alert('提示', '保存成功！', 'info');
+                                    setTimeout(function () {
+                                        $('#hiddenSID').val(data.Message);
+                                        $("#zcForm").attr('action', '../Student/DetailsRW');
+                                        $("#zcForm").submit();
+                                    }, 1000); break;
+                            }
+                        },
+                        error: function (data) {
+                            $.messager.alert('提示', '保存失败，错误信息：' + data.responseJSON.Message, 'error');
+                            $('#btnAgree').attr("onclick", "toSaveAndContinue()");
+                            $('#btnDisagree').attr("onclick", "toIndex()");
+                        }
+                    });
+                }
+            });
+        }
+
+        function Refresh() {
+            $("#zcForm").attr('target', '_self');
+            $("#zcForm").attr('action', '../Student/DetailsQC');
+            $("#zcForm").submit();
+        }
+
+    </script>
+</body>
+</html>

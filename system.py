@@ -200,6 +200,22 @@ def teacher_page():
             db.session.commit()
             return redirect(url_for('teacher_page'))
 
+@app.route('/agreement')
+def agreement():
+    return render_template('agreement.html')
+
+@app.route('/registration')
+def registration():
+    return render_template('registration.html')
+
+@app.route('/teacher/publish')
+def tea_publish():
+    return render_template('tea_publish.html')
+
+@app.route('/confirm')
+def confirm():
+    return render_template('confirm.html')
+
 if __name__ =='__main__':
     with app.app_context():
         # db.drop_all()

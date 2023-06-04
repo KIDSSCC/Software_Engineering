@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/static/jquery-3.3.1.js" type="text/javascript"></script>
+    <script src="toastr.min.js" type="text/javascript"></script>
+    <script src="toastr.min.css" type="text/css"></script>
+</head>
+
+<body>
+
+    <div id="zc_main_room">
+
+        <!--报名省份-->
+        <div class="form-group form-md-line-input">
+            <!-- <input type="text" class="form-control" style="color:gray;" id="txtProvince" value="" title="报考考点所在省份，如需修改请重新登录" readonly=""> -->
+            <select id="selectProvince" name="selectProvince" class="input_box" autocomplete="off">
+                <option value="" selected="">- 请选择 -</option>
+                <option value="11">北京市</option>
+                <option value="12">天津市</option>
+                <option value="13">河北省</option>
+                <option value="14">山西省</option>
+                <option value="15">内蒙古自治区</option>
+                <option value="21">辽宁省</option>
+                <option value="22">吉林省</option>
+                <option value="23">黑龙江省</option>
+                <option value="31">上海市</option>
+                <option value="32">江苏省</option>
+                <option value="33">浙江省</option>
+                <option value="34">安徽省</option>
+                <option value="35">福建省</option>
+                <option value="36">江西省</option>
+                <option value="37">山东省</option>
+                <option value="41">河南省</option>
+                <option value="42">湖北省</option>
+                <option value="43">湖南省</option>
+                <option value="44">广东省</option>
+                <option value="45">广西壮族自治区</option>
+                <option value="46">海南省</option>
+                <option value="50">重庆市</option>
+                <option value="51">四川省</option>
+                <option value="52">贵州省</option>
+                <option value="53">云南省</option>
+                <option value="54">西藏自治区</option>
+                <option value="61">陕西省</option>
+                <option value="62">甘肃省</option>
+                <option value="63">青海省</option>
+                <option value="64">宁夏回族自治区</option>
+                <option value="65">新疆维吾尔自治区</option>
+                <option value="82">澳门</option>
+            </select>
+            <label for="txtProvince"><span class="r">*</span>&nbsp;报考省份：</label>
+        </div>
+
+        <!--证件类型-->
+        <div class="form-group form-md-line-input">
+            <select id="selIDType" class="form-control" required="" data-bv-notempty-message="请选择证件类型" autocomplete="off">
+                <option value="">- 请选择 -</option>
+                    <option value="1">中华人民共和国居民身份证</option>
+                    <option value="2">台湾居民往来大陆通行证</option>
+                    <option value="3">港澳居民来往内地通行证</option>
+                    <option value="4">护照</option>
+                    <option value="5">香港身份证</option>
+                    <option value="6">澳门身份证</option>
+                    <option value="7">港澳居民居住证</option>
+                    <option value="8">台湾居民居住证</option>
+                    <option value="9">中华人民共和国外国人永久居留身份证</option>
+            </select>
+            <label for="selIDType"><span class="r">*</span>&nbsp;证件类型：</label>
+            <span class="help-block">学籍证件类型</span>
+        </div>
+
+        <!--证件号码-->
+        <div class="form-group form-md-line-input">
+            <input id="txtIDNumber" class="form-control placeholder" type="text" placeholder="请输入证件号码" maxlength="32" autocomplete="off">
+            <label for="txtIDNumber"><span class="r">*</span>&nbsp;证件号码：</label>
+            <span class="help-block">学籍证件号码</span>
+        </div>
+
+        <!--姓名-->
+        <div class="form-group form-md-line-input">
+            <input id="txtName" class="form-control placeholder" type="text" placeholder="请输入姓名" maxlength="64" onchange="javascript: if (!/^((([\u2E80-\uFE4F]|[a-zA-Z])+((·|\s|-|\(|\))?([\u2E80-\uFE4F]|[a-zA-Z]))*\)?)|([a-zA-Z]+((·|\s|-|.|,)?[a-zA-Z])*))$/g.test($.trim(this.value))) { $.messager.alert('姓名输入错误', '姓名只能为以下两种格式：1.中文字符或字母开头，包含中文字符、字母、不连续不在结尾的“·”、空格、“-”、“(”、不连续可在结尾的“)”。2.字母开头，包含字母、不连续不在首尾的“·”、空格、“-”、“.”、“,”。', 'error'); }" autocomplete="off">
+            <label for="txtName"><span class="r">*</span>&nbsp;姓名：</label>
+            <span class="help-block">学籍姓名</span>
+        </div>
+
+        <!--查询-->
+        <div>
+            <table style="width:100%;line-height: 44px;" border="0" cellspacing="0" cellpadding="0">
+                <tbody><tr>
+                    <td align="center">
+                        <a href="{{url_for('confirm')}}" id="btnSearch" class="zc_button" onclick="query()" style="text-decoration: none;"><span style="padding-right:30px;">查</span>询</a>
+                    </td>
+                </tr>
+            </tbody></table>
+            <br>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var passportIDNumber = '120105yyyymmddxxxx'.toUpperCase();
+        var passportName = '星穹铁道'.toUpperCase();
+
+        function query() {
+              if ('False'.toUpperCase() == 'TRUE') {
+                $.messager.alert('提示', '2022年国庆假期期间（10月1日-7日）暂停报名服务，10月8日8:00恢复。', 'info');
+                return;
+            }
+            var idtype = $('#selIDType').val();
+            var idnumber = $.trim($('#txtIDNumber').val()).toUpperCase();
+            var name = $.trim($('#txtName').val()).toUpperCase();
+
+            if (!check(idtype, idnumber, name)) { return; }
+
+            if (passportIDNumber && idnumber != passportIDNumber) {
+                $.messager.confirm('提示', '证件号码“' + idnumber + '”与当前登录通行证绑定的证件号“' + passportIDNumber + '”不一致。确认无需修改并继续？', function (r1) {
+                    if (r1) {
+                        if (passportName && name != passportName) {
+                            $.messager.confirm('提示', '姓名“' + name + '”与当前登录通行证绑定的姓名“' + passportName + '”不一致。确认无需修改并继续？', function (r2) {
+                                if (r2) {
+                                    getQualifications(idtype, idnumber, name);
+                                }
+                            });
+                        }
+                        else {
+                            getQualifications(idtype, idnumber, name);
+                        }
+                    }
+                });
+            }
+            else if (passportName && name != passportName) {
+                $.messager.confirm('提示', '姓名“' + name + '”与当前登录通行证绑定的姓名“' + passportName + '”不一致。确认无需修改并继续？', function (r2) {
+                    if (r2) {
+                        getQualifications(idtype, idnumber, name);
+                    }
+                });
+            }
+            else {
+                getQualifications(idtype, idnumber, name);
+            };
+        }
+        function getQualifications(idtype, idnumber, name) {
+            $('#btnSearch').removeAttr('onclick');
+            $.ajax({
+                type: "post",
+                url: '../Student/GetQualifications',
+                data: {
+                    IDType: idtype, IDNumber: idnumber, Name: name,
+                    __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                },
+                success: function (data) {
+                    switch (data.ExceuteResultType) {
+                        case -1: toastr.error(data.Message, '错误');
+                            $('#btnSearch').attr("onclick", "query()");
+                            break;
+                        case 0: toastr.error('执行无结果！', '错误');
+                            $('#btnSearch').attr("onclick", "query()");
+                            break;
+                        case 1: $.messager.alert('提示', '查询成功！', 'info');
+                            setTimeout(function () {
+                                $('#hiddenSID').val(data.Message);
+                                $("#zcForm").attr('action', '../Student/DetailsQC?r=' + Math.random());
+                                $("#zcForm").submit();
+                            }, 1000); break;
+                    }
+                },
+                error: function (data) {
+                    $('#btnSearch').attr("onclick", "query()");
+                    $.messager.alert('提示', '查询失败，错误信息：' + data.responseJSON.Message, 'error');
+                }
+            });
+        }
+        function check(idtype, idnumber, name) {
+            if (!idtype) {
+                toastr.warning('请选择证件类型！', '警告');
+                return false;
+            }
+            if (!idnumber) {
+                toastr.warning('请输入证件号码！', '警告');
+                return false;
+            }
+            else if (!idnumber.CheckIDNumber()) {
+                toastr.error('证件号码只能输入字母、数字、英文括号！', '错误');
+                return false;
+            }
+            else if (!idnumber.ChineseLength() > 18) {
+                toastr.error('证件号码长度不能超出18位！', '错误');
+                return false;
+            }
+            else if ('1' == idtype) {
+                if (idnumber.length != 15 && idnumber.length != 18) {
+                    toastr.error('身份证号码长度错误！', '错误');
+                    return false;
+                }
+                else if (idnumber.length == 18 && !idnumber.isIDCard()) {
+                    toastr.error('证件号码"' + idnumber + '"不是有效的身份证号码！', '错误');
+                    return false;
+                }
+            }
+            if (!name) {
+                toastr.warning('请输入姓名！', '警告');
+                return;
+            }
+            else if (!name.ChineseLength() > 64) {
+                toastr.error('姓名长度不能超出64字符！', '错误');
+                return false;
+            }
+            else if (!name.match(/^((([\u2E80-\uFE4F]|[a-zA-Z])+((·|\s|-|\(|\))?([\u2E80-\uFE4F]|[a-zA-Z]))*\)?)|([a-zA-Z]+((·|\s|-|.|,)?[a-zA-Z])*))$/)) {
+                toastr.error('姓名只能为以下两种格式：1.中文字符或字母开头，包含中文字符、字母、不连续不在结尾的“·”、空格、“-”、“(”、不连续可在结尾的“)”。2.字母开头，包含字母、不连续不在首尾的“·”、空格、“-”、“.”、“,”。', '错误');
+                return false;
+            }
+            return true;
+        }
+
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-center-center",
+            timeOut: "5000"
+        };
+    </script>
+    <!-- TODO：选择科目 -->
+    <!-- TODO：缴费 -->
+    <!-- TODO：报名成功界面 -->
+</body>
+
+</html>
