@@ -125,10 +125,14 @@ def login():
         passwd=request.form.get('passwd')
         user=db.session.query(User).filter(User.user_type==u_type,User.account==account).first()
         if user and user.passwd==passwd:
+            global curr_user
+            curr_user = user
             if u_type=='0':
-                global curr_user
-                curr_user=user
                 return redirect(url_for('student_page'))
+            elif u_type=='1':
+                return redirect(url_for('teacher_page'))
+
+
         else:
             return '登录失败'
 
@@ -166,7 +170,35 @@ def student_page():
             db.session.commit()
             return redirect(url_for('student_page'))
 
-
+@app.route('/teacher',methods=['GET','POST'])
+def teacher_page():
+    if curr_user is None:
+        # 未登录状态
+        return 'not login in'
+    else:
+        # 基本信息查询
+        user_info = db.session.query(User_info).filter(
+            User_info.user_type == curr_user.user_type,
+            User_info.account == curr_user.account
+        ).first()
+        if request.method == 'GET':
+            return render_template(
+                'Tea_page.html',
+                username=user_info.name,
+                account=user_info.account,
+                name=user_info.name,
+                email=user_info.email,
+                telephone=user_info.tele,
+                id_no=user_info.id_no
+            )
+        elif request.method == 'POST':
+            # 信息的更新
+            user_info.email = request.form.get('email')
+            user_info.tele = request.form.get('telephone')
+            user_info.id_no = request.form.get('id_no')
+            db.session.add(user_info)
+            db.session.commit()
+            return redirect(url_for('teacher_page'))
 
 if __name__ =='__main__':
     with app.app_context():

@@ -1,0 +1,113 @@
+<html>
+
+<head>
+    <title>Student</title>
+    <link rel="stylesheet" href="/static/Stu_page.css"  />
+</head>
+
+<body class="body">
+    <!-- 左侧导航栏   -->
+    <div class="cbl">
+        <div class="cblcenter">
+            <div class="sign">
+                <em>教师主页</em>
+            </div>
+
+            <div class="nav_con">
+                <a href="#">个人信息</a>
+                <a href="#">题库管理</a>
+                <a href="#">我的学生</a>
+            </div>
+
+            </div>
+            <div class="copyright">©2023 南开大学  软件工程</div>
+        </div>
+    </div>
+
+
+    <div class="content">
+        <!-- 动画部分 -->
+        <div class="animation">
+            <div class="square">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="circle">
+                <ul>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 内容板块顶部导航 -->
+<!--        <a href="/admin" id="management" style="display:block;">管理中心</a>-->
+        <div class="topbar">
+            <div id="userstatus" style="display:true;">
+                <div class="greet">
+                    Hi , {{username}} !
+                </div>
+                <div class="inputclass">
+                    <form action="/login" method="post" >
+                        <button class="inputbutton" type="submit">登出</button>
+                    </form>
+                    <form action="/changepwd" method="post">
+                        <button class="inputbutton" type="submit">修改密码</button>
+                    </form>
+
+                </div>
+            </div>
+<!--            <div class="spilt_line">-->
+
+<!--            </div>-->
+        </div>
+        <div class="content_title">
+            <h1>基本信息 :</h1>
+        </div>
+        <form action="/student" method="post" style="margin-block-end:0">
+            <div class="info_item">
+                <h1>账号:</h1>
+                <input type="text" name="account" value={{account}} readonly>
+            </div>
+            <div class="info_item">
+                <h1>姓名:</h1>
+                <input type="text" name="name" value={{name}} readonly>
+            </div>
+<!--            <div class="info_item">-->
+<!--                <h1>学校:</h1>-->
+<!--                <input type="text" name="id_no" placeholder={{id_no}}>-->
+<!--            </div>-->
+            <div class="info_item">
+                <h1>证件类型:</h1>
+                <input type="text" name="id_type" value="待补充">
+            </div>
+            <div class="info_item">
+                <h1>证件号:</h1>
+                <input type="text" name="id_no" value={{id_no}}>
+            </div>
+            <div class="info_item">
+                <h1>电话:</h1>
+                <input type="text" name="telephone" value={{telephone}}>
+            </div>
+            <div class="info_item">
+                <h1>电子邮箱:</h1>
+                <input type="text" name="email" value={{email}}>
+            </div>
+            <form action="/teacher" method="post" >
+                <button class="commitbutton" type="submit">提交</button>
+            </form>
+        </form>
+
+    </div>
+</body>
+
+
+</html>

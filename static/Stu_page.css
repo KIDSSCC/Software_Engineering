@@ -14,8 +14,9 @@
     font-size: 24px;
     font-family: 'Microsoft YaHei UI Light';
     /* background-color: whitesmoke; */
-    background: linear-gradient(200deg,#e3c5eb,#a9c1ed);
-    overflow: hidden;
+
+    overflow-x: hidden;
+    height:auto;
 }
 .sign{
     height:100px;
@@ -26,7 +27,29 @@
     border-width: 1px;
     font-size: 24px;
 }
-
+em {
+    background-image: linear-gradient(90deg, rgb(114, 9, 212), rgb(40, 50, 212) 33%, rgb(0, 165, 178));
+    color: transparent;
+    box-sizing: border-box;
+    display: inline;
+    font-family: segoe-vf, sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    height: auto;
+    line-height: 48px;
+    pointer-events: auto;
+    tab-size: 4;
+    text-align: center;
+    text-shadow: none;
+    user-select: none;
+    width: auto;
+    word-break: break-word;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
 .cbl .cblcenter .nav_con{
     display: grid;
     height: 300px;
@@ -129,7 +152,8 @@
     width:auto;
     padding-top:10px;
     margin-left:200px;
-
+    padding-bottom100px;
+    background: linear-gradient(200deg,#e3c5eb,#a9c1ed);
 }
 .tittle{
     border:none;
@@ -188,6 +212,7 @@ margin-top:10px;
     height: 50px;
     font-size: 16px;
     margin-left: 170px;
+    margin-bottom:20px;
     /* border: 1px solid rgb(144, 142, 142); */
     box-shadow: 1px 1px 2px 0px #a8a8a8;
 }
