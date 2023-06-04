@@ -6,19 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="/static/jquery-3.3.1.js" type="text/javascript"></script>
+    <script src="jquery-3.3.1.js" type="text/javascript"></script>
     <script src="toastr.min.js" type="text/javascript"></script>
     <script src="toastr.min.css" type="text/css"></script>
+    <link rel="stylesheet" href="/static/registration.css"  />
 </head>
 
 <body>
+    <div id="zc_title" class="cen"><em>资格信息查询</em></div>
 
     <div id="zc_main_room">
 
         <!--报名省份-->
         <div class="form-group form-md-line-input">
-            <!-- <input type="text" class="form-control" style="color:gray;" id="txtProvince" value="" title="报考考点所在省份，如需修改请重新登录" readonly=""> -->
-            <select id="selectProvince" name="selectProvince" class="input_box" autocomplete="off">
+            <select id="selectProvince" class="form-control" required="" data-bv-notempty-message="请选择省份" autocomplete="off">
                 <option value="" selected="">- 请选择 -</option>
                 <option value="11">北京市</option>
                 <option value="12">天津市</option>

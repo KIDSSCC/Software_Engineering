@@ -208,6 +208,11 @@ def agreement():
 def registration():
     return render_template('registration.html')
 
+
+@app.route('/student/exams')
+def stu_exams():
+    return render_template('stu_exams.html')
+
 @app.route('/teacher/publish')
 def tea_publish():
     return render_template('tea_publish.html')
