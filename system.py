@@ -26,27 +26,22 @@ db=SQLAlchemy(app)
 
 
 # 数据表声明
-class User(db.Model):
-    __tablename__ = 'user'
-    user_type = db.Column(db.Integer, primary_key=True)
-    account=db.Column(db.String(18),primary_key=True)
-    passwd=db.Column(db.String(18))
-    name=db.Column(db.String(18))
+# class User(db.Model):
+#     __tablename__ = 'user'
+#     user_type = db.Column(db.Integer, primary_key=True)
+#     account=db.Column(db.String(18),primary_key=True)
+#     passwd=db.Column(db.String(18))
+#     name=db.Column(db.String(18))
 
 class User_info(db.Model):
     __tablename__= 'user_info'
     user_type = db.Column(db.Integer,primary_key=True)
     account = db.Column(db.String(18),primary_key=True)
     name = db.Column(db.String(18))
-    email = db.Column(db.String(18))
+    passwd = db.Column(db.String(18))
+    email = db.Column(db.String(30))
     tele = db.Column(db.String(18))
     id_no= db.Column(db.String(18))
-    __table_args__ = (
-        db.ForeignKeyConstraint(
-            ['user_type', 'account'],
-            ['user.user_type', 'user.account']
-        ),
-    )
 
 # 全局变量的声明
 curr_user=None
@@ -100,11 +95,8 @@ def register():
             # todo something
             return redirect(url_for("register"))
 
-        user_n=User(user_type=u_type,account=account,passwd=passwd,name=name)
+        user_n=User_info(user_type=u_type,account=account,passwd=passwd,name=name)
         db.session.add(user_n)
-        db.session.commit()
-        user_info_new=User_info(user_type=u_type,account=account,name=name)
-        db.session.add(user_info_new)
         db.session.commit()
 
         return redirect(url_for("login"))
@@ -123,7 +115,7 @@ def login():
         u_type=request.form.get('type')
         account=request.form.get('account')
         passwd=request.form.get('passwd')
-        user=db.session.query(User).filter(User.user_type==u_type,User.account==account).first()
+        user=db.session.query(User_info).filter(User_info.user_type==u_type,User_info.account==account).first()
         if user and user.passwd==passwd:
             global curr_user
             curr_user = user
@@ -230,13 +222,13 @@ if __name__ =='__main__':
         # db.drop_all()
         # db.create_all()
 
-        if db.engine.has_table('user'):
+        if db.engine.has_table('user_info'):
             print('已经存在')
         else :
             db.drop_all()
             db.create_all()
 
-        print('here')
+        # print('here')
         # role1=Role(name='admin')
         # role2=Role(name='admin1')
         # db.session.add_all([role1,role2])
