@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.10.16/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="/static/jquery-easyui-1.10.16/themes/icon.css">
-    <script src="/static/jquery-easyui-1.10.16/jquery.min.js" type="text/javascript"></script>
-    <script src="/static/jquery-easyui-1.10.16/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="toastr.min.js" type="text/javascript"></script>
-    <script src="toastr.min.css" type="text/css"></script>
+    <link rel="stylesheet" type="text/css" href="/static/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/static/easyui/themes/icon.css">
+    <script src="/static/easyui/jquery.min.js" type="text/javascript"></script>
+    <script src="/static/easyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="/static/toastr.min.js" type="text/javascript"></script>
+    <script src="/static/toastr.min.css" type="text/css"></script>
     <link rel="stylesheet" href="/static/registration.css"  />
 
 </head>
@@ -221,6 +221,8 @@
             });
         };
         function toSaveAndContinue() {
+                $.messager.confirm('提示', '报名成功！', 'info');
+                return;
               if ('False'.toUpperCase() == 'TRUE') {
                 $.messager.alert('提示', '2022年国庆假期期间（10月1日-7日）暂停报名服务，10月8日8:00恢复。', 'info');
                 return;

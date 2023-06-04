@@ -221,6 +221,10 @@ def tea_publish():
 def confirm():
     return render_template('confirm.html')
 
+@app.route('/student/take_exams')
+def take_exams():
+    return render_template('take_exams.html')
+
 if __name__ =='__main__':
     with app.app_context():
         # db.drop_all()

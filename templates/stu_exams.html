@@ -14,9 +14,9 @@
             </div>
 
             <div class="nav_con">
-                <a href="#">个人信息</a>
-                <a href="#">报名考试</a>
-                <a href="#">我的考试</a>
+                <a href="{{url_for('student_page')}}">个人信息</a>
+                <a href="{{url_for('agreement')}}">报名考试</a>
+                <a href="{{url_for('stu_exams')}}">我的考试</a>
                 <a href="#">成绩查询</a>
             </div>
 
@@ -48,14 +48,14 @@
             <div class="line"></div>
         </div>
         <div style="min-height: 140px;margin:0px 20px 0px 20px;">
-            <a href="/test/exam1" class="testbox">
-                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">exam1</div><br>
+            <a href="{{url_for('take_exams')}}" class="testbox">
+                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">作文测试</div><br>
                 <div style="font-size:15px;">开始时间：Jun-03-2023 15:31:50</div>
                 <div style="font-size:15px;">时长限制：120分钟</div>
             </a>
 
             <a href="/test/exam2" class="testbox">
-                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">exam2</div><br>
+                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">exam4</div><br>
                 <div style="font-size:15px;">开始时间：Jun-03-2023 15:45:33</div>
                 <div style="font-size:15px;">时长限制：60分钟</div>
             </a>
