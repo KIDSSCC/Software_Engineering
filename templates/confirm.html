@@ -40,17 +40,17 @@
                 <table class="ufo_table_02" width="100%" border="0" cellspacing="0" cellpadding="0" style="width: 827px;margin-bottom: 20px;margin-top:25px;margin-left:3px;">
                     <tbody><tr>
                         <td width="130">
-                            <img class="zp" style="height: 160px; width: 120px; " id="imgPhotoShow" src="../Student/Show?r=0.22239591144990212">
+                            <img class="zp" style="height: 160px; width: 160px; " id="imgPhotoShow" src="/static/pic/photo.jpg">
                         </td>
                         <td>
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <tbody><tr style="height: 30px;">
                                     <td class="lz_td1" align="right"><span>姓　　名：</span></td>
-                                    <td class="lz_td2"><span id="lblName">星穹铁道</span></td>
+                                    <td class="lz_td2"><span id="lblName">三月七</span></td>
                                 </tr>
                                 <tr style="height: 30px;">
                                     <td class="lz_td1" align="right"><span>性　　别：</span></td>
-                                    <td class="lz_td2"><span id="lblGender">男</span></td>
+                                    <td class="lz_td2"><span id="lblGender">女</span></td>
                                 </tr>
                                 <tr style="height: 30px;">
                                     <td class="lz_td1" align="right"><span>证件类型：</span></td>
@@ -58,11 +58,11 @@
                                 </tr>
                                 <tr style="height: 30px;">
                                     <td class="lz_td1" align="right"><span>证件号码：</span></td>
-                                    <td class="lz_td2"><span id="lblIDNumber">120105yyyymmddxxxx</span></td>
+                                    <td class="lz_td2"><span id="lblIDNumber">150723yyyymmddxxxx</span></td>
                                 </tr>
                                 <tr style="height: 30px;">
                                     <td class="lz_td1" align="right"><span>资格科目：</span></td>
-                                    <td class="lz_td2"><span id="lblIDNumber" title="CET6、CJT4、CJT6、CGT4、CGT6、CRT4、CRT6、CFT4、CET-SET6">英语六级笔试；日语四级笔试；日语六级笔试；德语四级笔试；德语六级笔试；俄语四级笔试；俄语六级笔试；法语四级笔试；英语六级口试</span></td>
+                                    <td class="lz_td2"><span id="lblSubject" title="CET6、CJT4、CJT6、CGT4、CGT6、CRT4、CRT6、CFT4、CET-SET6">英语六级笔试；日语四级笔试；日语六级笔试；德语四级笔试；德语六级笔试；俄语四级笔试；俄语六级笔试；法语四级笔试；英语六级口试</span></td>
                                 </tr>
                             </tbody></table>
                         </td>
@@ -117,7 +117,7 @@
                                     <td class="lz_td1">班　　级：</td>
                                     <td class="lz_td2">1</td>
                                     <td class="lz_td1">学　　号：</td>
-                                    <td class="lz_td2">2012202</td>
+                                    <td class="lz_td2">20abcde</td>
                                 </tr>
 
                                 <tr>
@@ -173,7 +173,7 @@
         var idnumber = '120105yyyymmddxxxx';
         var name = '星穹铁道';
         $(function () {
-            $("#imgPhotoShow").attr('src', '../Student/Show?r=' + Math.random());
+            $("#imgPhotoShow").attr('src', '/static/pic/photo.jpg');
             if ($('#chkAssure').is(':checked')) {
                 $('#spanAgree').hide();
                 $('#divAgree').show();

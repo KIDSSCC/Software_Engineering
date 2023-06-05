@@ -219,18 +219,12 @@ def take_exams():
 
 if __name__ =='__main__':
     with app.app_context():
-        # db.drop_all()
-        # db.create_all()
+        db.drop_all()
+        db.create_all()
 
-        if db.engine.has_table('user_info'):
-            print('已经存在')
-        else :
-            db.drop_all()
-            db.create_all()
-
-        # print('here')
-        # role1=Role(name='admin')
-        # role2=Role(name='admin1')
-        # db.session.add_all([role1,role2])
-        # db.session.commit()
+        # if db.engine.has_table('user_info'):
+        #     print('已经存在')
+        # else :
+        #     db.drop_all()
+        #     db.create_all()
     app.run()
