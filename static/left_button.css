@@ -1,0 +1,12 @@
+/* 对于左侧侧边栏的按钮样式 */
+
+.nav_con button{
+    background-color: #333;
+    height: 120px;
+    color: white;
+    font-size: 20px;
+    letter-spacing: 1px;
+    border-color: white;
+    border-left: none;
+    border-right: none;
+}

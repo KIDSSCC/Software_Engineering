@@ -14,7 +14,8 @@
     font-size: 24px;
     font-family: 'Microsoft YaHei UI Light';
     /* background-color: whitesmoke; */
-    background: linear-gradient(200deg,#e3c5eb,#a9c1ed);
+    /* background: linear-gradient(200deg,#e3c5eb,#a9c1ed); */
+    background-color: rgba(169, 193, 237, 0.5);
     overflow-x: hidden;
 }
 .sign{
@@ -129,7 +130,9 @@
     width:auto;
     padding-top:10px;
     margin-left:200px;
-    background: linear-gradient(200deg,#e3c5eb,#a9c1ed);
+    /* background: linear-gradient(200deg,#e3c5eb,#a9c1ed); */
+    /* background-color: #a9c1ed; */
+    background-color: rgba(169, 193, 237, 0.1);
 }
 .tittle{
     border:none;

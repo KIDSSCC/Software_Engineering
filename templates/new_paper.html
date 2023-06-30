@@ -1,0 +1,280 @@
+<html>
+
+<head>
+    <title>Home Page——Project OTS</title>
+    <link rel="stylesheet" href="/static/exams.css" type="text/css">
+    <link rel="stylesheet" href="/static/sign_em.css" type="text/css">
+    <link rel="stylesheet" href="/static/left_button.css" type="text/css">
+    <link rel="stylesheet" href="/static/new_paper.css" type="text/css">
+
+    <link rel="stylesheet" href="../static/exams.css" type="text/css">
+    <link rel="stylesheet" href="../static/sign_em.css" type="text/css">
+    <link rel="stylesheet" href="../static/left_button.css" type="text/css">
+    <link rel="stylesheet" href="../static/new_paper.css" type="text/css">
+
+    <script src="/static/jquery-easyui-1.10.16/jquery.min.js"></script>
+    <script src="../static/jquery-easyui-1.10.16/jquery.min.js"></script>
+</head>
+
+<body class="body">
+    <!-- 左侧导航栏   -->
+    <div class="cbl">
+        <div class="cblcenter">
+            <div class="sign">
+                <em>教师主页</em>
+            </div>
+            <div class="nav_con">
+                <button id="addMultchoice_Q">添加选择题</button>
+                <button id="addSubject_Q">添加主观题</button>
+                <button id="submit">完成编辑</button>
+            </div>
+        </div>
+        <div class="copyright">©2023 南开大学 软件工程</div>
+    </div>
+    </div>
+    <div class="content">
+        <a href="{{url_for('teacher_page')}}" id="back">&lt;</a>
+        <div class="tittlebar">
+            <span class="tittle">教师主页>>题库管理>>编辑试卷</span>
+            <div class="line"></div>
+        </div>
+
+        <div id="targetContainer" class="targetContainer">
+            <!-- 这是要追加标签的目标容器 -->
+            <h2>点击左侧添加试题</h2>
+            <div id="question-container_C" class="question-container_C">
+                <div class="question">
+                    <label for="question-input">题目：</label>
+                    <input class="题目" type="text" id="question-input" name="question" placeholder="请输入题目">
+                </div>
+
+                <div class="option">
+                    <label for="option-a">选项A:</label>
+                    <input type="text" id="option-a" name="optionA" placeholder="请输入选项A">
+                    <label for="option-b">选项B:</label>
+                    <input type="text" id="option-b" name="optionB" placeholder="请输入选项B">
+                </div>
+                <div class="option">
+                    <label for="option-c">选项C:</label>
+                    <input type="text" id="option-c" name="optionC" placeholder="请输入选项C">
+                    <label for="option-d">选项D:</label>
+                    <input type="text" id="option-d" name="optionD" placeholder="请输入选项D">
+                </div>
+
+               
+                <div class="score">
+                    <label for="score">分数：</label>
+                    <input type="text" id="option-d" name="score_C" placeholder="请输入选择题赋分">
+                    <label for="answer">答案：</label>
+                    <input type="text" id="option-d" name="answer_C" placeholder="请输入选择题答案">
+                </div>
+
+                <button class="delete-question">删除</button>
+            </div>
+
+            <div id="question-container_S" class="question-container_S">
+                <div class="简答题标签">
+                    <label for="essay-question">主观题题目：</label>
+                </div>
+                <div class="简答题内容框">
+                    <textarea id="essay-question" name="essayQuestion" rows="5" placeholder="请输入主观题描述"></textarea>
+                </div>
+                <label for="score">分数：</label>
+                <input type="text" id="option-d" name="score_S" placeholder="请输入主观题赋分">
+                <br>
+                <button class="delete-question">删除</button>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+        // 添加选择题事件
+        const addC_Button = document.getElementById('addMultchoice_Q');
+        const targetContainer = document.getElementById('targetContainer');
+        // 监听按钮的点击事件
+        addC_Button.addEventListener('click', function() {
+        // 创建新的容器元素
+        const newContainer = document.getElementById('question-container_C').cloneNode(true);
+        // 将新标签添加到目标容器中
+        targetContainer.appendChild(newContainer);
+        newContainer.style.display = 'block';
+        });
+    </script>
+
+    <script>
+        // 添加简答题事件
+        const addS_Button = document.getElementById('addSubject_Q');
+        // 监听按钮的点击事件
+        addS_Button.addEventListener('click', function() {
+        // 创建新的容器元素
+        const newContainer_S = document.getElementById('question-container_S').cloneNode(true);
+        // 将新标签添加到目标容器中
+        targetContainer.appendChild(newContainer_S);
+        newContainer_S.style.display = 'block';
+        });
+    </script>
+
+
+
+    <script>
+        //删除事件
+        const curr_Container = document.getElementById('targetContainer');
+        // 添加事件监听器到父级元素
+        curr_Container.addEventListener('click', function(event) {
+            // 检查点击的元素是否为删除按钮
+            if (event.target.classList.contains('delete-question')) {
+                // 获取删除按钮所在的容器
+                const container = event.target.parentNode;
+
+                // 从父级元素中移除容器
+                container.parentNode.removeChild(container);
+            }
+        });
+    </script>
+
+    <script>
+        // 提交事件
+        const myButton = document.getElementById('submit');
+  
+        // 添加点击事件监听器
+        myButton.addEventListener('click', function() {
+            // 获取所有 question-container_C 容器
+            const questionContainers_C = document.getElementsByClassName('question-container_C'); 
+            const questionContainers_S = document.getElementsByClassName('question-container_S');
+            let question_num=questionContainers_C.length+questionContainers_S.length-2;
+            // 创建一个新的表单数据对象
+            const formData = new FormData();
+            formData.append('题目总数', question_num+'\n-------------------');
+
+            // 遍历 questionContainers
+            for (let i = 1; i < questionContainers_C.length; i++)
+            {
+                let result='选择题'+i+'\n';
+                //遍历每一个选择题的情况
+                const questionContainer = questionContainers_C[i];
+                 // 获取题目输入框的值
+                const questionInput = questionContainer.querySelector('.题目');
+                const questionValue = questionInput.value;
+                result+='题目:'+questionValue+'\n';
+                // 获取选项输入框的值
+                const optionInputs = questionContainer.querySelectorAll('.option input');
+                const options = [];
+                optionInputs.forEach(function(optionInput) {
+                    options.push(optionInput.value);
+                });
+                result += '选项: ' + options.join('~') + '\n';
+                // 获取分数输入框的值
+                const scoreInput = questionContainer.querySelector('.score input[name="score_C"]');
+                const scoreValue = scoreInput.value;
+                result += '分数: ' + scoreValue + '\n';
+
+                // 获取答案输入框的值
+                const answerInput = questionContainer.querySelector('.score input[name="answer_C"]');
+                const answerValue = answerInput.value;
+                result += '答案: ' + answerValue + '\n';
+                result += '-------------------\n';
+                formData.append('选择题'+i, result);
+            }
+            for (let i = 1; i < questionContainers_S.length; i++)
+            {
+                let result='主观题'+(i+questionContainers_C.length-1)+'\n';
+                const essayContainer = questionContainers_S[i];
+                // 获取主观题描述内容
+                const textarea = essayContainer.querySelector('textarea');
+                const essayQuestionValue = textarea.value;
+                result+='主观题描述:'+essayQuestionValue+'\n';
+  
+                // 获取分数输入框的值
+                const scoreInput = essayContainer.querySelector('input[name="score_S"]');
+                const scoreValue = scoreInput.value;
+                result += '分数: ' + scoreValue + '\n';
+                result += '-------------------\n';
+                formData.append('主观题'+(i+questionContainers_C.length-1), result);
+            }
+
+
+  
+        // 发起 POST 请求
+        fetch('/teacher/publish/new_paper', {
+            method: 'POST',
+            body: formData
+        })
+        .then(Response =>{
+            window.location.href = "{{url_for('tea_publish')}}";
+        })
+
+    });
+    </script>
+
+
+
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", "button[id][name='operate']", function () {
+                if ($(this).val() != "查看" && $(this).val() != "成绩") {
+                    su = this;
+                    $.post("/operate/{{managetool}}", $(this).parent().parent().serialize() + "&" + this.name + "=" + this.value, function (data, status) {
+                        if ($(su).val() == "更新") {
+                            $(su).parent().nextAll("#result").html(data);
+                        }
+                        else if ($(su).val() == "删除") {
+                            $(su).parent().nextAll("#result").html(data);
+                            if (data != "删除失败") {
+                                ca = $(su).parent().parent()
+                                ca.children().remove()
+                                lll = setInterval(function () {
+                                    if (ca.css("opacity") != 0) {
+                                        ca.css("opacity", ca.css("opacity") - 0.1);
+                                    }
+                                    else if (ca.height() != 0) {
+                                        ca.height(ca.height() - 1);
+                                    }
+                                    else {
+                                        ca.remove();
+                                        clearInterval(lll);
+                                    }
+                                }, 10);
+                            };
+                        }
+                        else if ($(su).val() == "添加" || $(su).val() == "添加并开始") {
+                            if (data != "添加失败") {
+                                $('#insertxy').before(data);
+                                $(su).parent().nextAll("#result").html("添加成功");
+                            }
+                            else { $(su).parent().nextAll("#result").html(data); };
+                        }
+                        else if ($(su).val() == "开始") {
+                            if (data != "操作失败") {
+                                $(su).html("结束");
+                                $(su).val("结束");
+                                $(su).parent().parent().find("[name='状态']").val("正在进行");
+                            };
+                            $(su).parent().nextAll("#result").html(data);
+                        }
+                        else if ($(su).val() == "结束") {
+                            if (data != "操作失败") {
+                                $(su).html("开始");
+                                $(su).val("开始");
+                                $(su).parent().parent().find("[name='状态']").val("已结束");
+                            };
+                            $(su).parent().nextAll("#result").html(data);
+                        };
+                    });
+                }
+                else {
+                    // $(this).parent().parent().submit();
+                };
+            });
+        });
+    </script>
+</body>
+
+</html>

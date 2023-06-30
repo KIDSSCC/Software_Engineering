@@ -4,6 +4,7 @@
     <title>Home Page——Project OTS</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link rel="stylesheet" href="/static/exams.css" type="text/css">
+    <link rel="stylesheet" href="../static/exams.css" type="text/css">
     <script src="/static/jquery-easyui-1.10.16/jquery.min.js"></script>
 </head>
 
@@ -24,28 +25,49 @@
     </div>
     </div>
     <div class="content">
-        <div class="square">
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-        <div class="circle">
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div><a href="/admin" id="back">&lt;</a>
+        <a href="{{url_for('teacher_page')}}" id="back">&lt;</a>
         <div class="tittlebar">
             <span class="tittle">教师管理：题库上传</span>
             <div class="line"></div>
         </div>
+
+
+        <div class="questionbox">
+            <div class="line"></div>
+            <div class="list">
+                <span class="column" style="width:200;">试卷名称</span>
+                <span class="column" style="width:250;">说明</span>
+                <span class="column" style="width:250;">操作</span>
+                <span class="column" style="width:70;">状态</span>
+            </div>
+            <form class="list" id="题库管理*" action="/teacher/publish" method="POST">
+
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="试卷名称" style="border:none;height:33px;width:200;" placeholder="编辑试卷名" value="">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="说明" style="border:none;height:33px;width:250;" placeholder="编辑试卷说明" value="">
+                </div>
+                <div class="column" style="width:250;">
+                    <button  name="Add" class="operater" id="*" value="添加">编辑试卷</button>
+                    <button  name="other" class="operater" id="*" value="添加">other</button>
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="状态"style="border:none;height:33px;width:70;" placeholder="无" value="">
+                </div>
+
+            </form>
+
+
+
+
+
+
+
+
+
+
+<!-- 
         <div class="questionbox">
             <div class="line"></div>
             <div class="list">
@@ -87,8 +109,13 @@
                 <div id="result" class="column" style="width:70;font-size:16px;">载入完毕</div>
             </form>
             <div style="height:0px;" id="insertxy"></div>
-        </div>
+        </div> -->
+
+
     </div>
+
+
+
     <script>
         $(document).ready(function () {
             $(document).on("click", "button[id][name='operate']", function () {

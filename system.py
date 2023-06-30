@@ -1,5 +1,6 @@
 from flask import Flask,render_template,request,flash,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 app=Flask(__name__)
 
@@ -32,19 +33,30 @@ db=SQLAlchemy(app)
 #     account=db.Column(db.String(18),primary_key=True)
 #     passwd=db.Column(db.String(18))
 #     name=db.Column(db.String(18))
-
+# 数据表的声明
 class User_info(db.Model):
     __tablename__= 'user_info'
     user_type = db.Column(db.Integer,primary_key=True)
-    account = db.Column(db.String(18),primary_key=True)
+    account = db.Column(db.String(18),primary_key=True,index=True)
     name = db.Column(db.String(18))
     passwd = db.Column(db.String(18))
     email = db.Column(db.String(30))
     tele = db.Column(db.String(18))
     id_no= db.Column(db.String(18))
 
+class Published_paper(db.Model):
+    __tablename__ = 'published_paper'
+    id = db.Column(db.Integer, primary_key=True)
+    account = db.Column(db.String(18), db.ForeignKey('user_info.account'))
+    paper_name=db.Column(db.String(18))
+    paper_description=db.Column(db.String(256))
+    path=db.Column(db.String(20))
+    Answer_num=db.Column(db.Integer)
+
 # 全局变量的声明
 curr_user=None
+paper_name=None
+paper_description=None
 
 
 
@@ -90,7 +102,6 @@ def register():
         check_passwd=request.form.get('check_passwd')
         name = request.form.get('name')
         # 密码校验
-        print(type)
         if passwd !=check_passwd:
             # todo something
             return redirect(url_for("register"))
@@ -205,9 +216,46 @@ def registration():
 def stu_exams():
     return render_template('stu_exams.html')
 
-@app.route('/teacher/publish')
+@app.route('/teacher/publish',methods=['GET','POST'])
 def tea_publish():
-    return render_template('tea_publish.html')
+    if request.method == 'GET':
+        return render_template('tea_publish.html')
+    elif request.method == 'POST':
+        if request.form.get('Add')=='添加':
+            # 记录下新添加进来的试卷名以及试卷说明
+            global paper_name
+            global paper_description
+            paper_name=request.form.get('试卷名称')
+            paper_description=request.form.get('说明')
+            return redirect(url_for('publish_new_paper'))
+        else:
+            return 'other'
+
+@app.route('/teacher/publish/new_paper',methods=['GET','POST'])
+def publish_new_paper():
+    if request.method == 'GET':
+        return render_template('new_paper.html')
+    elif request.method == 'POST':
+        # 需要保存试卷信息，确定试卷名
+        useraccount=curr_user.account
+        path=useraccount+'_'+paper_name+'.json'
+        data = request.form
+        # 将表单数据转换为字典
+        data_dict = {}
+        for key in data.keys():
+            data_dict[key] = data.get(key)
+
+        # 将字典保存为 JSON 文件
+        with open(path, 'w',encoding='utf-8') as file:
+            json.dump(data_dict, file,ensure_ascii=False)
+
+        # 已经保存了json文件，开始进行数据库的处理
+        user_n = Published_paper(account=useraccount, paper_name=paper_name, paper_description=paper_description, path=path)
+        db.session.add(user_n)
+        db.session.commit()
+
+        return True
+
 
 @app.route('/confirm')
 def confirm():
@@ -219,12 +267,12 @@ def take_exams():
 
 if __name__ =='__main__':
     with app.app_context():
-        db.drop_all()
-        db.create_all()
+        # db.drop_all()
+        # db.create_all()
 
-        # if db.engine.has_table('user_info'):
-        #     print('已经存在')
-        # else :
-        #     db.drop_all()
-        #     db.create_all()
+        if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):
+            print('已经存在')
+        else :
+            db.drop_all()
+            db.create_all()
     app.run()

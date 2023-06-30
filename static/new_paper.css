@@ -1,0 +1,92 @@
+/* 发布试题页面中的定制组件 */
+
+.targetContainer{
+    margin-left: 30px;
+}
+
+.question-container_C{
+    display:none;
+    border: 2px solid whitesmoke;
+    border-right: none;
+    padding: 20px;
+}
+
+.question-container_C label{
+    display: contents;
+    height: 15px;
+    /* display: inline-block; */
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.question-container_C .题目{
+    width: 500px;
+}
+.question-container_C input{
+    width: 175px;
+    height: 30px;
+    vertical-align: middle;
+    margin-right: 20px;
+}
+
+.question-container_S{
+    display:none;
+    border: 2px solid whitesmoke;
+    border-right: none;
+    padding: 20px;
+}
+
+.question-container_S label{
+    display: contents;
+    height: 15px;
+    /* display: inline-block; */
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.question-container_S .题目{
+    width: 500px;
+}
+.question-container_S input{
+    width: 175px;
+    height: 30px;
+    vertical-align: middle;
+    margin-right: 20px;
+}
+
+
+
+.question {
+    margin-bottom: 15px;
+}
+.delete-question {
+    height: 30px;
+    width: 200px;
+    margin-left: 65px;
+    margin-top: 20px;
+    vertical-align: middle;
+}
+
+
+.option {
+    margin-bottom: 15px;
+}
+
+.option input{
+    margin-left: 1px;
+}
+
+.tittlebar {
+    margin-bottom: 20px;
+}
+
+.简答题标签{
+    margin-bottom: 10px;
+}
+
+.简答题内容框 textarea{
+    height: 100px;
+    width: 600px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
