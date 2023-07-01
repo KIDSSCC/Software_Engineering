@@ -1,0 +1,50 @@
+.question {
+    display: block;
+    border: 3px solid white;
+    height: 170px;
+    width: 1200px;
+    margin-bottom: none;
+    margin-left: 20px;
+}
+.question p{
+    color: #000000b8;
+    font-size: 28px;
+    font-style: normal;
+    margin-left: 20px;
+}
+
+.question label{
+    width: 100px;
+    font-size: 24px;
+    font-style: normal;
+    margin-left: 30px;
+    margin-right: 10px;
+    
+}
+
+.question input[type="checkbox"] {
+    transform: scale(2.0); /* 改变复选框的大小 */
+  }
+
+.question_S {
+    display: block;
+    /* border: 3px solid white; */
+    height: 500px;
+    margin-bottom: none;
+    margin-left: 24px;
+    font-size: 20px;
+    font-style: normal;
+}
+.question_S textarea{
+    margin-top: 10px;
+    padding-top: 20px;
+    height: 400px;
+    width: 1200px;
+    float: left;
+    background-color: azure;
+}
+
+.countdown {
+    height: 75px;
+}
+

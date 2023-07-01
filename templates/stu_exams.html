@@ -4,6 +4,7 @@
 <head>
     <title>Exam Page</title>
     <link rel="stylesheet" href="/static/exams.css" type="text/css" />
+    <link rel="stylesheet" href="../static/exams.css" type="text/css" />
 </head>
 
 <body class="body">
@@ -26,29 +27,21 @@
     </div>
 
     <div class="content">
-        <div class="square">
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-        <div class="circle">
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div><a href="/admin" id="management" style="display:none;">管理中心</a>
-        <div class="tittlebar"><span class="tittle">正在进行的测试</span>
+        <a href="/admin" id="management" style="display:none;">管理中心</a>
+        <div class="tittlebar"><span class="tittle">未完成的考试</span>
             <div class="line"></div>
         </div>
+
         <div style="min-height: 140px;margin:0px 20px 0px 20px;">
-            <a href="{{url_for('take_exams')}}" class="testbox">
+            {% for exam in uncompleted_exam %}
+                <a class="testbox" onclick="sendPostRequest(this)">
+                    <input readonly="readonly" type="text" name="exam_id" value="{{exam.id}}" style="display: none;">
+                    <div style="text-align: center; font-size:32px;font-family: 'Microsoft Yahei UI';padding-bottom: 10px;">{{exam.paper_name}}</div>
+                    <div style="text-align: center; font-size:15px;font-family: 'Microsoft Yahei UI';padding-bottom: 3px;">{{exam.paper_description}}</div>
+                    <div style="text-align: center; font-size:15px;">时长限制:{{exam.time}}分钟</div>
+                </a>
+            {% endfor %}
+            <!-- <a href="{{url_for('take_exams')}}" class="testbox">
                 <div style="text-align: center;font-family: 'Microsoft Yahei UI';">作文测试</div><br>
                 <div style="font-size:15px;">开始时间：Jun-03-2023 15:31:50</div>
                 <div style="font-size:15px;">时长限制：120分钟</div>
@@ -58,14 +51,22 @@
                 <div style="text-align: center;font-family: 'Microsoft Yahei UI';">exam4</div><br>
                 <div style="font-size:15px;">开始时间：Jun-03-2023 15:45:33</div>
                 <div style="font-size:15px;">时长限制：60分钟</div>
-            </a>
-
+            </a> -->
         </div>
-        <div class="tittlebar"><span class="tittle">曾经参加的测试</span>
+
+        <div class="tittlebar"><span class="tittle">已完成的考试</span>
             <div class="line"></div>
         </div>
         <div style="min-height: 140px;margin:0px 20px 0px 20px;">
-            <a href="/result/exam1" class="testbox">
+            {% for exam in completed_exam %}
+                <a class="testbox">
+                    <div style="text-align: center; font-size:32px;font-family: 'Microsoft Yahei UI';padding-bottom: 10px;">{{exam.paper_name}}</div>
+                    t-align: c<div style="text-align: center; font-size:15px;font-family: 'Microsoft Yahei UI';padding-bottom: 3px;">{{exam.paper_description}}</div>
+                    <!-- <div style="texenter; font-size:15px;">时长限制:{{exam.time}}分钟</div> -->
+                </a>
+            {% endfor %}
+
+            <!-- <a href="/result/exam1" class="testbox">
                 <div style="text-align: center;font-family: 'Microsoft Yahei UI';">exam1</div>
                 <div style="font-size:15px;margin-top:10px;">答卷时间：Jun-03-2023 15:34:20</div>
                 <div style="font-size:15px;">时长限制：120分钟</div>
@@ -77,10 +78,27 @@
                 <div style="font-size:15px;margin-top:10px;">答卷时间：Jun-03-2023 15:46:46</div>
                 <div style="font-size:15px;">时长限制：60分钟</div>
                 <div style="font-size:15px;">测试状态：正在进行</div>
-            </a>
+            </a> -->
 
         </div>
     </div>
+
+
+    <script>
+        function sendPostRequest(container) {
+        var examIdInput = container.querySelector('input[name="exam_id"]');
+        var examId = examIdInput.value;
+        const formData = new FormData();
+        formData.append('试卷id', examId);
+        fetch('/student/take_exams', {
+            method: 'POST',
+            body: formData
+        })
+        .then(Response =>{
+            window.location.href = "{{url_for('take_exams')}}";
+        })
+    }
+    </script>
 </body>
 
 

@@ -1,6 +1,7 @@
 import json
 
 def print_json_content(file_path):
+
     with open(file_path, 'r',encoding='utf-8') as file:
         json_data = json.load(file)
         print(json.dumps(json_data, indent=4,ensure_ascii=False))

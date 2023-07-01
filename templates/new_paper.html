@@ -148,12 +148,12 @@
             let question_num=questionContainers_C.length+questionContainers_S.length-2;
             // 创建一个新的表单数据对象
             const formData = new FormData();
-            formData.append('题目总数', question_num+'\n-------------------');
+            formData.append('题目总数', question_num);
 
             // 遍历 questionContainers
             for (let i = 1; i < questionContainers_C.length; i++)
             {
-                let result='选择题'+i+'\n';
+                let result='';
                 //遍历每一个选择题的情况
                 const questionContainer = questionContainers_C[i];
                  // 获取题目输入框的值
@@ -176,12 +176,11 @@
                 const answerInput = questionContainer.querySelector('.score input[name="answer_C"]');
                 const answerValue = answerInput.value;
                 result += '答案: ' + answerValue + '\n';
-                result += '-------------------\n';
                 formData.append('选择题'+i, result);
             }
             for (let i = 1; i < questionContainers_S.length; i++)
             {
-                let result='主观题'+(i+questionContainers_C.length-1)+'\n';
+                let result='';
                 const essayContainer = questionContainers_S[i];
                 // 获取主观题描述内容
                 const textarea = essayContainer.querySelector('textarea');
@@ -192,7 +191,6 @@
                 const scoreInput = essayContainer.querySelector('input[name="score_S"]');
                 const scoreValue = scoreInput.value;
                 result += '分数: ' + scoreValue + '\n';
-                result += '-------------------\n';
                 formData.append('主观题'+(i+questionContainers_C.length-1), result);
             }
 

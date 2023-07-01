@@ -2,6 +2,7 @@ from flask import Flask,render_template,request,flash,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 import json
+from Item_structure import *
 
 app=Flask(__name__)
 
@@ -73,6 +74,14 @@ curr_user=None
 paper_name=None
 paper_description=None
 exam_time=None
+curr_choice_score=None
+
+paper_for_student=None
+
+
+all_choice=[]
+all_subject=[]
+exam_limit_time=None
 
 
 
@@ -156,9 +165,6 @@ def login():
 
         else:
             return '登录失败'
-
-
-
 
 
 @app.route('/student',methods=['GET','POST'])
@@ -291,7 +297,16 @@ def registration():
 
 @app.route('/student/exams')
 def stu_exams():
-    return render_template('stu_exams.html')
+    # 学生选择进行考试
+    uncompleted_exam=ExamList.query.filter(ExamList.student == curr_user.account, ExamList.choice_score == 0).all()
+    completed_exam = ExamList.query.filter(ExamList.student == curr_user.account, ExamList.choice_score != 0).all()
+    uncompleted=[]
+    completed=[]
+    for item in uncompleted_exam:
+        uncompleted.append(Published_paper.query.filter(Published_paper.id == item.paper).first())
+    for item in completed_exam:
+        completed.append(Published_paper.query.filter(Published_paper.id == item.paper).first())
+    return render_template('stu_exams.html',completed_exam=completed,uncompleted_exam=uncompleted)
 
 @app.route('/teacher/publish',methods=['GET','POST'])
 def tea_publish():
@@ -341,9 +356,45 @@ def publish_new_paper():
 def confirm():
     return render_template('confirm.html')
 
-@app.route('/student/take_exams')
+@app.route('/student/take_exams',methods=['GET','POST'])
 def take_exams():
-    return render_template('take_exams.html')
+    # 根据post请求中提供的试卷id展示对应的试卷
+    if request.method =='POST':
+        data = request.form.get('试卷id')
+        # 先根据id在publish_paper表中查找对应的试卷表项，获取文件路径
+        global paper_for_student
+        paper_for_student = Published_paper.query.filter_by(id=data).first()
+
+        global all_choice,all_subject
+        all_choice,all_subject=json2class(paper_for_student.path)
+        # 向页面中传递信息，包括选择题，主观题，与考试时间
+        return '/student/take_exams'
+        # return render_template('take_exams.html',all_choice=all_choice,all_subject=all_subject,time=paper.time)
+    elif request.method == 'GET':
+
+        return render_template('take_exams.html', all_choice=all_choice, all_subject=all_subject, time=str(paper_for_student.time))
+
+
+@app.route('/student/take_exams/settle',methods=['POST'])
+def settleAccount():
+    useraccount = curr_user.account
+    path = 'stu'+useraccount + '_' + paper_for_student.paper_name + '.json'
+    data = request.form
+    data_dict = {}
+    for key in data.keys():
+        data_dict[key] = data.get(key)
+
+    with open(path, 'w', encoding='utf-8') as file:
+        json.dump(data_dict, file, ensure_ascii=False)
+    # 进行数据库的处理，更新自动阅卷分数
+    entry = ExamList.query.filter_by(student=curr_user.account, paper=paper_for_student.id).first()
+    entry.choice_score = int(data.get('客观题总分'))
+    db.session.commit()
+
+    return 'here'
+
+
+
 
 @app.route('/changepwd',methods=['GET','POST'])
 def change_pwd():
@@ -503,7 +554,7 @@ def adm_exammanagement():
             return 'other'
 if __name__ =='__main__':
     with app.app_context():
-        db.drop_all()
+        # db.drop_all()
         db.create_all()
 
         # if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):
