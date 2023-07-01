@@ -11,23 +11,23 @@
 
 <body>
     <div class="container">
-        <div class="tit">登录</div>
-        <form action="/login" method="post">
+        <div class="tit">忘记密码</div>
+        <form action="/forgetpwd" method="post">
             <select name="type">
                 <option value="0">学生用户</option>
                 <option value="1">教师用户</option>
                 <option value="2">管理员用户</option>
             </select>
             <input type="text" placeholder="账号" name="account">
-            <input type="password" placeholder="密码" name="passwd">
+            <input type="email" placeholder="邮箱" name="email">
             <button>登录</button>
             <span>没有账号？<a href="{{url_for('register')}}">去注册</a></span>
-            <div class="forget">
-                <a href="{{url_for('forgetpwd')}}">忘记密码？</a>
-            </div>
-
+{#            <span>想起密码啦? <a href="{{url_for('login')}}">去登录</a></span>#}
+{#            <div class="forget">#}
+{#                <a href="{{url_for('login')}}">想起密码啦？去登录</a>#}
+{#            </div>#}
         </form>
-
+        
     </div>
 
     <div class="square">

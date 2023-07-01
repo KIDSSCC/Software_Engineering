@@ -55,6 +55,7 @@ class Published_paper(db.Model):
     paper_description=db.Column(db.String(256))
     path=db.Column(db.String(20))
     Answer_num=db.Column(db.Integer)
+    time=db.Column(db.Integer)
 
 class ExamList(db.Model):
     # 学生参加考试的情况
@@ -71,6 +72,7 @@ class ExamList(db.Model):
 curr_user=None
 paper_name=None
 paper_description=None
+exam_time=None
 
 
 
@@ -148,10 +150,16 @@ def login():
                 return redirect(url_for('student_page'))
             elif u_type=='1':
                 return redirect(url_for('teacher_page'))
+            elif u_type=='2':
+                return redirect(url_for('admin_page'))
 
 
         else:
             return '登录失败'
+
+
+
+
 
 @app.route('/student',methods=['GET','POST'])
 def student_page():
@@ -217,6 +225,41 @@ def teacher_page():
             db.session.commit()
             return redirect(url_for('teacher_page'))
 
+@app.route('/admin',methods=['GET','POST'])
+def admin_page():
+    """
+    管理员主页
+    :return:
+    """
+    if curr_user is None:
+        # 未登录状态
+        return 'not login in'
+    else:
+        # 基本信息查询
+        user_info = db.session.query(User_info).filter(
+            User_info.user_type == curr_user.user_type,
+            User_info.account == curr_user.account
+        ).first()
+        if request.method=='GET':
+                return render_template(
+                    'Adm_page.html',
+                    username=user_info.name,
+                    account = user_info.account,
+                    name= user_info.name,
+                    email=user_info.email,
+                    telephone=user_info.tele,
+                    id_no=user_info.id_no
+                )
+        elif request.method=='POST':
+            # 信息的更新
+            user_info.email=request.form.get('email')
+            user_info.tele=request.form.get('telephone')
+            user_info.id_no=request.form.get('id_no')
+            db.session.add(user_info)
+            db.session.commit()
+            return redirect(url_for('admin_page'))
+
+
 @app.route('/student/agreement')
 def agreement():
     return render_template('agreement.html')
@@ -260,8 +303,10 @@ def tea_publish():
             # 记录下新添加进来的试卷名以及试卷说明
             global paper_name
             global paper_description
+            global exam_time
             paper_name=request.form.get('试卷名称')
             paper_description=request.form.get('说明')
+            exam_time=request.form.get('考试时间')
             return redirect(url_for('publish_new_paper'))
         else:
             return 'other'
@@ -285,7 +330,7 @@ def publish_new_paper():
             json.dump(data_dict, file,ensure_ascii=False)
 
         # 已经保存了json文件，开始进行数据库的处理
-        user_n = Published_paper(account=useraccount, paper_name=paper_name, paper_description=paper_description, path=path,Answer_num=0)
+        user_n = Published_paper(account=useraccount, paper_name=paper_name, paper_description=paper_description, time=exam_time, path=path,Answer_num=0)
         db.session.add(user_n)
         db.session.commit()
 
@@ -300,9 +345,165 @@ def confirm():
 def take_exams():
     return render_template('take_exams.html')
 
+@app.route('/changepwd',methods=['GET','POST'])
+def change_pwd():
+    if curr_user is None:
+        # 未登录状态
+        return 'not login in'
+    else:
+        # 基本信息查询
+        user_info = db.session.query(User_info).filter(
+            User_info.user_type == curr_user.user_type,
+            User_info.account == curr_user.account
+        ).first()
+        if request.method == 'GET':
+            u_type =user_info.user_type
+            print(u_type)
+            if u_type == 0:
+                return render_template('stu_changepwd.html',username=user_info.name)
+            elif u_type == 1:
+                return render_template('tea_changepwd.html',username=user_info.name)
+            elif u_type== 2:
+                return render_template('adm_changepwd.html',username=user_info.name)
+            return "人员类型不存在！"
+        elif request.method == 'POST':
+            # 信息的更新
+            dbpwd = user_info.passwd
+            oldpwd = request.form.get('oldpwd')
+            newpwd = request.form.get('newpwd')
+            newpwd1 = request.form.get('newpwd1')
+
+            if dbpwd!= oldpwd:
+                return "原密码错误"
+            elif newpwd == oldpwd:
+                return "新密码不可与原密码一致"
+            elif newpwd != newpwd1:
+                return "两次输入的新密码不一致"
+            else:
+                user_info.passwd = newpwd
+                db.session.commit()
+                return redirect(url_for('change_pwd'))
+
+@app.route('/forgetpwd',methods=['GET','POST'])
+def forgetpwd():
+    if request.method=='GET':
+        # 注册页面
+        return render_template('forgetpwd.html')
+    elif request.method=='POST':
+        # 提交表单之后，跳转到学生主页
+        u_type = request.form.get('type')
+        account = request.form.get('account')
+        email = request.form.get("email")
+        user = db.session.query(User_info).filter(User_info.user_type == u_type, User_info.account == account).first()
+        if user and user.email == email:
+            global curr_user
+            curr_user = user
+            if u_type == '0':
+                return redirect(url_for('student_page'))
+            elif u_type == '1':
+                return redirect(url_for('teacher_page'))
+            elif u_type=='2':
+                return redirect(url_for('admin_page'))
+        else:
+            return '邮箱验证错误'
+        
+@app.route('/admin/user_management',methods=['GET','POST'])
+def adm_usermanagement():
+    if request.method == 'GET':
+        results = User_info.query.all()
+        return render_template('adm_usermanage.html',all_user=results)
+    elif request.method == 'POST':
+        if request.form.get('Add')=='添加':
+            type =request.form.get('用户类型')
+            account = request.form.get('用户id')
+            name = request.form.get('用户名')
+            pwd = request.form.get('密码')
+            email = request.form.get('邮箱')
+            tele = request.form.get('电话号')
+            sfzh = request.form.get('身份证号')
+            user_n = User_info(user_type=type, account=account, name=name,passwd=pwd, email=email,tele=tele,id_no=sfzh)
+            db.session.add(user_n)
+            db.session.commit()
+            return redirect(url_for('adm_usermanagement'))
+        elif request.form.get('Update') == '更新':
+            type = request.form.get('用户类型')
+            account = request.form.get('用户id')
+            user_info = db.session.query(User_info).filter(
+                User_info.user_type == type,
+                User_info.account == account
+            ).first()
+
+            user_info.name = request.form.get('用户名')
+            user_info.passwd = request.form.get('密码')
+            user_info.email = request.form.get('邮箱')
+            user_info.tele = request.form.get('电话号')
+            user_info.id_no = request.form.get('身份证号')
+
+            db.session.commit()
+
+            return redirect(url_for('adm_usermanagement'))
+        elif request.form.get('delete') == '删除':
+            type = request.form.get('用户类型')
+            account = request.form.get('用户id')
+            user_info = db.session.query(User_info).filter(
+                User_info.user_type == type,
+                User_info.account == account
+            ).first()
+            db.session.delete(user_info)
+            db.session.commit()
+
+            return redirect(url_for('adm_usermanagement'))
+        else:
+            return 'other'
+
+@app.route('/admin/exam_management',methods=['GET','POST'])
+def adm_exammanagement():
+    if request.method == 'GET':
+        results = Published_paper.query.all()
+        return render_template('adm_exammanage.html',all_exam=results)
+    elif request.method == 'POST':
+        if request.form.get('Add')=='添加':
+            id =request.form.get('试卷id')
+            account = request.form.get('发布教师id')
+            name = request.form.get('试卷名称')
+            desc = request.form.get('试卷描述')
+            path = request.form.get('试卷路径')
+            num = request.form.get('考生人数')
+
+            paper = Published_paper(id=id, account=account, paper_name=name,paper_description=desc, path=path,Answer_num=num)
+            db.session.add(paper)
+            db.session.commit()
+            return redirect(url_for('adm_exammanagement'))
+
+        elif request.form.get('Update') == '更新':
+            id = request.form.get('试卷id')
+            exam_info = db.session.query(Published_paper).filter(
+                Published_paper.id == id
+            ).first()
+            exam_info.account=request.form.get('发布教师id')
+            exam_info.paper_name = request.form.get('试卷名称')
+            exam_info.paper_description = request.form.get('试卷描述')
+            exam_info.path = request.form.get('试卷路径')
+            exam_info.Answer_num = request.form.get('考生人数')
+
+            db.session.commit()
+
+            return redirect(url_for('adm_exammanagement'))
+        elif request.form.get('delete') == '删除':
+            id = request.form.get('试卷id')
+            exam_info = db.session.query(Published_paper).filter(
+                Published_paper.id == id
+            ).first()
+
+            db.session.delete(exam_info)
+            db.session.commit()
+
+            return redirect(url_for('adm_exammanagement'))
+        else:
+            return 'other'
 if __name__ =='__main__':
     with app.app_context():
-        # db.drop_all()
+        db.drop_all()
         db.create_all()
 
         # if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Student</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="/static/Stu_page.css"  />
 </head>
 
@@ -10,14 +10,13 @@
     <div class="cbl">
         <div class="cblcenter">
             <div class="sign">
-                学生主页
+                管理员主页
             </div>
 
-            <div class="nav_con">
+             <div class="nav_con">
                 <a href="#">个人信息</a>
-                <a href="{{url_for('agreement')}}">报名考试</a>
-                <a href="{{url_for('stu_exams')}}">我的考试</a>
-                <a href="#">成绩查询</a>
+                <a href="{{url_for('agreement')}}">用户管理</a>
+                <a href="#">信息管理</a>
             </div>
 
             </div>
@@ -59,8 +58,8 @@
                     <form action="/login" method="get" >
                         <button class="inputbutton" type="submit">登出</button>
                     </form>
-                    <form action="/changepwd" method="get">
-                        <button class="inputbutton" type="submit">修改密码</button>
+                    <form action="/admin" method="get">
+                        <button class="inputbutton" type="submit">个人信息</button>
                     </form>
 
                 </div>
@@ -70,34 +69,22 @@
 <!--            </div>-->
         </div>
         <div class="content_title">
-            <h1>基本信息 :</h1>
+            <h1>修改密码 :</h1>
         </div>
-        <form action="/student" method="post">
+        <form action="/changepwd" method="post">
             <div class="info_item">
-                <h1>账号:</h1>
-                <input type="text" name="account" value={{account}} readonly>
+                <h1>原密码:</h1>
+                <input type="password" name="oldpwd" value={{oldpwd}}>
             </div>
             <div class="info_item">
-                <h1>姓名:</h1>
-                <input type="text" name="name" value={{name}} readonly>
+                <h1>新密码:</h1>
+                <input type="password" name="newpwd" value={{newpwd}}>
             </div>
             <div class="info_item">
-                <h1>电子邮箱:</h1>
-                <input type="text" name="email" value={{email}}>
+                <h1>确认新密码:</h1>
+                <input type="password" name="newpwd1" value={{newpwd1}}>
             </div>
-            <div class="info_item">
-                <h1>电话:</h1>
-                <input type="text" name="telephone" value={{telephone}}>
-            </div>
-            <div class="info_item">
-                <h1>证件类型:</h1>
-                <input type="text" name="id_type" value="中华人民共和国居民身份证">
-            </div>
-            <div class="info_item">
-                <h1>证件号:</h1>
-                <input type="text" name="id_no" placeholder={{id_no}}>
-            </div>
-            <form action="/student" method="post">
+            <form action="/changepwd" method="post">
                 <button class="commitbutton" type="submit">提交</button>
             </form>
         </form>

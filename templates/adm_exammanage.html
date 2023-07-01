@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Home Page——Project OTS</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link rel="stylesheet" href="/static/exams.css" type="text/css">
     <link rel="stylesheet" href="../static/exams.css" type="text/css">
@@ -10,23 +10,27 @@
 
 <body class="body">
     <!-- 左侧导航栏   -->
+
     <div class="cbl">
         <div class="cblcenter">
             <div class="sign">
-                <em>教师主页</em>
+                管理员主页
             </div>
+
             <div class="nav_con">
-                <a href="#">个人信息</a>
-                <a href="#">题库管理</a>
-                <a href="#">我的学生</a>
+                <a href="{{url_for('admin_page')}}">个人信息</a>
+                <a href="{{url_for('adm_usermanagement')}}">用户管理</a>
+                <a href="{{url_for('adm_exammanagement')}}">试题管理</a>
             </div>
+
         </div>
-        <div class="copyright">©2023 南开大学 软件工程</div>
+        <div class="copyright">©2023 南开大学  软件工程</div>
     </div>
+
     <div class="content">
-        <a href="{{url_for('teacher_page')}}" id="back">&lt;</a>
+        <a href="{{url_for('admin_page')}}" id="back">&lt;</a>
         <div class="tittlebar">
-            <span class="tittle">教师管理：题库上传</span>
+            <span class="tittle">试题管理</span>
             <div class="line"></div>
         </div>
 
@@ -34,49 +38,72 @@
         <div class="questionbox">
             <div class="line"></div>
             <div class="list">
-                <span class="column" style="width:200;">试卷名称</span>
-                <span class="column" style="width:250;">说明</span>
-                <span class="column" style="width:250;">考试时间</span>
-                <span class="column" style="width:250;">操作</span>
-                <span class="column" style="width:70;">状态</span>
+                <!-- <span class="column" style="width:100;">试卷id</span> -->
+                <span class="column" style="width:100;">发布教师</span>
+                <span class="column" style="width:100;">试卷名称</span>
+                <span class="column" style="width:100;">试卷描述</span>
+                <span class="column" style="width:200;">考试时间</span>
+                <!-- <span class="column" style="width:200;">试卷路径</span> -->
+                <span class="column" style="width:200;">考生人数</span>
+                <span class="column" style="width:100;">操作</span>
             </div>
-            <form class="list" id="题库管理*" action="/teacher/publish" method="POST">
+            <form class="list" id="题库管理*" action="/admin/exam_management" method="POST">
 
+                <!-- <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="试卷id" style="border:none;height:33px;width:100;" placeholder="编辑试卷id" value="">
+                </div> -->
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input name="试卷名称" style="border:none;height:33px;width:200;" placeholder="编辑试卷名" value="">
+                    <input name="发布教师" style="border:none;height:33px;width:100;" placeholder="编辑发布教师id" value="">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input name="说明" style="border:none;height:33px;width:250;" placeholder="编辑试卷说明" value="">
+                    <input name="试卷名称" style="border:none;height:33px;width:100;" placeholder="编辑试卷名称" value="">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input name="考试时间" style="border:none;height:33px;width:250;" placeholder="编辑考试时间" value="">
-                </div>
-                <div class="column" style="width:250;">
-                    <button  name="Add" class="operater" id="*" value="添加">编辑试卷</button>
+                    <input name="试卷描述" style="border:none;height:33px;width:100;" placeholder="编辑试卷描述" value="">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="状态"style="border:none;height:33px;width:70;"  value="无">
+                    <input name="考试时间" style="border:none;height:33px;width:200;" placeholder="编辑考试时间" value="">
+                </div>
+                <!-- <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="试卷路径" style="border:none;height:33px;width:200;" placeholder="编辑试卷路径" value="">
+                </div> -->
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="考生人数" style="border:none;height:33px;width:200;" placeholder="编辑考生人数" value="">
+                </div>
+                <div class="column" style="width:100;">
+                    <button  name="Add" class="operater" id="*" value="添加">添加试卷</button>
                 </div>
             </form>
-            
-            {% for result in all_paper %}
-            <form class="list" id="题库管理*" action="/teacher/publish" method="POST">
+
+            {% for result in all_exam %}
+            <form class="list" id="题库管理*" action="/admin/exam_management" method="POST">
+                <!-- <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="试卷id" style="border:none;height:33px;width:100;"  value="{{result.id}}">
+                </div> -->
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="试卷名称" style="border:none;height:33px;width:200;"  value="{{result.paper_name}}">
-                </div>
-                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="说明" style="border:none;height:33px;width:250;"  value="{{result.paper_description}}">
-                </div>
-                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="考试时间" style="border:none;height:33px;width:250;"  value="{{result.time}}">
-                </div>
-                <div class="column" style="width:250;">
-                    <button  name="Update" class="operater" id="*" value="添加">更新</button>
-                    <button  name="delete" class="operater" id="*" value="添加">删除</button>
+                    <input  name="发布教师" style="border:none;height:33px;width:100;"  value="{{result.account}}">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="状态"style="border:none;height:33px;width:70;" value="已发布">
+                    <input  name="试卷名称" style="border:none;height:33px;width:100;"  value="{{result.paper_name}}">
                 </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="试卷描述" style="border:none;height:33px;width:100;"  value="{{result.paper_description}}">
+                </div>
+                <!-- <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="试卷路径" style="border:none;height:33px;width:200;"  value="{{result.path}}">
+                </div> -->
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="试卷路径" style="border:none;height:33px;width:200;"  value="{{result.time}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="考生人数" style="border:none;height:33px;width:200;"  value="{{result.Answer_num}}">
+                </div>
+                <div class="column" style="width:100;">
+                    <button  name="Update" class="operater" id="*" value="更新">更新</button>
+                    <button  name="delete" class="operater" id="*" value="删除">删除</button>
+                </div>
+
+
             </form>
             {% endfor %}
         </div>
@@ -88,7 +115,7 @@
 
 
 
-            <!-- 
+            <!--
         <div class="questionbox">
             <div class="line"></div>
             <div class="list">

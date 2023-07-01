@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Home Page——Project OTS</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link rel="stylesheet" href="/static/exams.css" type="text/css">
     <link rel="stylesheet" href="../static/exams.css" type="text/css">
@@ -10,23 +10,27 @@
 
 <body class="body">
     <!-- 左侧导航栏   -->
+
     <div class="cbl">
         <div class="cblcenter">
             <div class="sign">
-                <em>教师主页</em>
+                管理员主页
             </div>
+
             <div class="nav_con">
-                <a href="#">个人信息</a>
-                <a href="#">题库管理</a>
-                <a href="#">我的学生</a>
+                <a href="{{url_for('admin_page')}}">个人信息</a>
+                <a href="{{url_for('adm_usermanagement')}}">用户管理</a>
+                <a href="{{url_for('adm_exammanagement')}}">试题管理</a>
             </div>
+
         </div>
-        <div class="copyright">©2023 南开大学 软件工程</div>
+        <div class="copyright">©2023 南开大学  软件工程</div>
     </div>
+
     <div class="content">
-        <a href="{{url_for('teacher_page')}}" id="back">&lt;</a>
+        <a href="{{url_for('admin_page')}}" id="back">&lt;</a>
         <div class="tittlebar">
-            <span class="tittle">教师管理：题库上传</span>
+            <span class="tittle">用户管理</span>
             <div class="line"></div>
         </div>
 
@@ -34,49 +38,72 @@
         <div class="questionbox">
             <div class="line"></div>
             <div class="list">
-                <span class="column" style="width:200;">试卷名称</span>
-                <span class="column" style="width:250;">说明</span>
-                <span class="column" style="width:250;">考试时间</span>
-                <span class="column" style="width:250;">操作</span>
-                <span class="column" style="width:70;">状态</span>
+                <span class="column" style="width:100;">用户类型</span>
+                <span class="column" style="width:100;">用户id</span>
+                <span class="column" style="width:100;">用户名</span>
+                <span class="column" style="width:100;">密码</span>
+                <span class="column" style="width:200;">邮箱</span>
+                <span class="column" style="width:200;">电话号</span>
+                <span class="column" style="width:200;">身份证号</span>
+                <span class="column" style="width:100;">操作</span>
             </div>
-            <form class="list" id="题库管理*" action="/teacher/publish" method="POST">
+            <form class="list" id="题库管理*" action="/admin/user_management" method="POST">
 
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input name="试卷名称" style="border:none;height:33px;width:200;" placeholder="编辑试卷名" value="">
+                    <input name="用户类型" style="border:none;height:33px;width:100;" placeholder="编辑用户类型" value="">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input name="说明" style="border:none;height:33px;width:250;" placeholder="编辑试卷说明" value="">
+                    <input name="用户id" style="border:none;height:33px;width:100;" placeholder="编辑用户id" value="">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input name="考试时间" style="border:none;height:33px;width:250;" placeholder="编辑考试时间" value="">
-                </div>
-                <div class="column" style="width:250;">
-                    <button  name="Add" class="operater" id="*" value="添加">编辑试卷</button>
+                    <input name="用户名" style="border:none;height:33px;width:100;" placeholder="编辑用户名" value="">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="状态"style="border:none;height:33px;width:70;"  value="无">
+                    <input name="密码" style="border:none;height:33px;width:100;" placeholder="编辑密码" value="">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="邮箱" style="border:none;height:33px;width:200;" placeholder="编辑邮箱" value="">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="电话号" style="border:none;height:33px;width:200;" placeholder="编辑电话号" value="">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input name="身份证号" style="border:none;height:33px;width:200;" placeholder="编辑身份证号" value="">
+                </div>
+                <div class="column" style="width:100;">
+                    <button  name="Add" class="operater" id="*" value="添加">添加用户</button>
                 </div>
             </form>
-            
-            {% for result in all_paper %}
-            <form class="list" id="题库管理*" action="/teacher/publish" method="POST">
+
+            {% for result in all_user %}
+            <form class="list" id="题库管理*" action="/admin/user_management" method="POST">
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="试卷名称" style="border:none;height:33px;width:200;"  value="{{result.paper_name}}">
-                </div>
-                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="说明" style="border:none;height:33px;width:250;"  value="{{result.paper_description}}">
+                    <input readonly="readonly" name="用户类型" style="border:none;height:33px;width:100;"  value="{{result.user_type}}">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="考试时间" style="border:none;height:33px;width:250;"  value="{{result.time}}">
-                </div>
-                <div class="column" style="width:250;">
-                    <button  name="Update" class="operater" id="*" value="添加">更新</button>
-                    <button  name="delete" class="operater" id="*" value="添加">删除</button>
+                    <input  readonly="readonly" name="用户id" style="border:none;height:33px;width:100;"  value="{{result.account}}">
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
-                    <input readonly="readonly" name="状态"style="border:none;height:33px;width:70;" value="已发布">
+                    <input  name="用户名" style="border:none;height:33px;width:100;"  value="{{result.name}}">
                 </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="密码" style="border:none;height:33px;width:100;"  value="{{result.passwd}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="邮箱" style="border:none;height:33px;width:200;"  value="{{result.email}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="电话号" style="border:none;height:33px;width:200;"  value="{{result.tele}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  name="身份证号" style="border:none;height:33px;width:200;"  value="{{result.id_no}}">
+                </div>
+                <div class="column" style="width:100;">
+                    <button  name="Update" class="operater" id="*" value="更新">更新</button>
+                    <button  name="delete" class="operater" id="*" value="删除">删除</button>
+                </div>
+
+
             </form>
             {% endfor %}
         </div>
@@ -88,7 +115,7 @@
 
 
 
-            <!-- 
+            <!--
         <div class="questionbox">
             <div class="line"></div>
             <div class="list">
