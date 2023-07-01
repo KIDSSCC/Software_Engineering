@@ -1,5 +1,6 @@
 from flask import Flask,render_template,request,flash,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 import json
 
 app=Flask(__name__)
@@ -35,6 +36,7 @@ db=SQLAlchemy(app)
 #     name=db.Column(db.String(18))
 # 数据表的声明
 class User_info(db.Model):
+    # 用户的个人信息
     __tablename__= 'user_info'
     user_type = db.Column(db.Integer,primary_key=True)
     account = db.Column(db.String(18),primary_key=True,index=True)
@@ -45,6 +47,7 @@ class User_info(db.Model):
     id_no= db.Column(db.String(18))
 
 class Published_paper(db.Model):
+    # 所有教师用户已经发布的试卷
     __tablename__ = 'published_paper'
     id = db.Column(db.Integer, primary_key=True)
     account = db.Column(db.String(18), db.ForeignKey('user_info.account'))
@@ -52,6 +55,17 @@ class Published_paper(db.Model):
     paper_description=db.Column(db.String(256))
     path=db.Column(db.String(20))
     Answer_num=db.Column(db.Integer)
+
+class ExamList(db.Model):
+    # 学生参加考试的情况
+    __tablename__ = 'exam_info_list'
+    id = db.Column(db.Integer, primary_key=True)
+    student=db.Column(db.String(18))
+    paper=db.Column(db.Integer)
+    choice_score=db.Column(db.Integer)
+    subject_score=db.Column(db.Integer)
+    total_score=db.Column(db.Integer)
+
 
 # 全局变量的声明
 curr_user=None
@@ -203,9 +217,29 @@ def teacher_page():
             db.session.commit()
             return redirect(url_for('teacher_page'))
 
-@app.route('/agreement')
+@app.route('/student/agreement')
 def agreement():
     return render_template('agreement.html')
+
+
+@app.route('/student/select',methods=['GET','POST'])
+def selectExam():
+    if request.method == 'GET':
+        results = Published_paper.query.all()
+        return render_template('selectExam.html', all_paper=results)
+    elif request.method == 'POST':
+        account=curr_user.account
+        button_id = request.form.get('paper_id')
+        # 考试信息表添加新项
+        new_record = ExamList(student=account, paper=button_id,choice_score=0,subject_score=0,total_score=0)
+        db.session.add(new_record)
+        db.session.commit()
+        # 更新试卷表中的考试人数
+        paper = Published_paper.query.get(button_id)
+        paper.Answer_num += 1
+        db.session.commit()
+        return redirect(url_for('selectExam'))
+
 
 @app.route('/registration')
 def registration():
@@ -219,7 +253,8 @@ def stu_exams():
 @app.route('/teacher/publish',methods=['GET','POST'])
 def tea_publish():
     if request.method == 'GET':
-        return render_template('tea_publish.html')
+        results = Published_paper.query.all()
+        return render_template('tea_publish.html',all_paper=results)
     elif request.method == 'POST':
         if request.form.get('Add')=='添加':
             # 记录下新添加进来的试卷名以及试卷说明
@@ -250,11 +285,11 @@ def publish_new_paper():
             json.dump(data_dict, file,ensure_ascii=False)
 
         # 已经保存了json文件，开始进行数据库的处理
-        user_n = Published_paper(account=useraccount, paper_name=paper_name, paper_description=paper_description, path=path)
+        user_n = Published_paper(account=useraccount, paper_name=paper_name, paper_description=paper_description, path=path,Answer_num=0)
         db.session.add(user_n)
         db.session.commit()
 
-        return True
+        return 'add paper'
 
 
 @app.route('/confirm')
@@ -268,11 +303,11 @@ def take_exams():
 if __name__ =='__main__':
     with app.app_context():
         # db.drop_all()
-        # db.create_all()
+        db.create_all()
 
-        if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):
-            print('已经存在')
-        else :
-            db.drop_all()
-            db.create_all()
+        # if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):
+        #     print('已经存在')
+        # else :
+        #     db.drop_all()
+        #     db.create_all()
     app.run()

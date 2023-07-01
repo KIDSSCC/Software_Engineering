@@ -152,8 +152,9 @@ em {
     width:auto;
     padding-top:10px;
     margin-left:200px;
-    padding-bottom100px;
+    padding-bottom:100px;
     background: linear-gradient(200deg,#e3c5eb,#a9c1ed);
+    overflow: auto
 }
 .tittle{
     border:none;

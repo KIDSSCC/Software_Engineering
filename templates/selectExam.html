@@ -1,0 +1,74 @@
+<html>
+
+<head>
+    <title>Home Page——Project OTS</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <link rel="stylesheet" href="/static/exams.css" type="text/css">
+    <link rel="stylesheet" href="../static/exams.css" type="text/css">
+    <script src="/static/jquery-easyui-1.10.16/jquery.min.js"></script>
+</head>
+
+<body class="body">
+    <!-- 左侧导航栏   -->
+    <div class="cbl">
+        <div class="cblcenter">
+            <div class="sign">
+                <em>学生主页</em>
+            </div>
+            <div class="nav_con">
+                <a href="#">个人信息</a>
+                <a href="#">题库管理</a>
+                <a href="#">我的学生</a>
+            </div>
+        </div>
+        <div class="copyright">©2023 南开大学 软件工程</div>
+    </div>
+    <div class="content">
+        <a href="{{url_for('teacher_page')}}" id="back">&lt;</a>
+        <div class="tittlebar">
+            <span class="tittle">报名考试：选择科目</span>
+            <div class="line"></div>
+        </div>
+
+
+        <div id="all_exam" class="questionbox">
+            <div class="line"></div>
+            <div class="list">
+                <span class="column" style="width:200;">考试名称</span>
+                <span class="column" style="width:250;">发布人</span>
+                <span class="column" style="width:250;">介绍</span>
+                <span class="column" style="width:250;">操作</span>
+                <span class="column" style="width:70;">状态</span>
+            </div>
+
+            {% for result in all_paper %}
+            <form class="list" id="题库管理*" action="/student/select" method="POST">
+                <input type="hidden" name="paper_id" value="{{ result.id }}">
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="考试名称" style="border:none;height:33px;width:200;"  value="{{result.paper_name}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="发布人" style="border:none;height:33px;width:250;"  value="{{result.account}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="介绍" style="border:none;height:33px;width:250;"  value="{{result.paper_description}}">
+                </div>
+                <div class="column" style="width:250;">
+                    <button  name="Update" class="operater" id="{{result.paper_name}}" value="添加">报名考试</button>
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="状态"style="border:none;height:33px;width:70;" value="已发布">
+                </div>
+            </form>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+
+    
+</body>
+
+</html>
