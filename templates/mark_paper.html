@@ -1,153 +1,155 @@
 <html>
 
 <head>
-    <title>Take Exam</title>
-    <link rel="stylesheet" href="/static/take_exams.css" type="text/css" />
-    <link rel="stylesheet" href="/static/exam.css" type="text/css" />
-    <link rel="stylesheet" href="/static/answer_area.css" type="text/css" />
-    <link rel="stylesheet" href="/static/left_button.css" type="text/css" />
-    <script src="/static/easyui/jquery.min.js" type="text/javascript"></script>
-
-    <link rel="stylesheet" href="../static/take_exams.css" type="text/css" />
-    <link rel="stylesheet" href="../static/exam.css" type="text/css" />
-    <link rel="stylesheet" href="../static/answer_area.css" type="text/css" />
-    <link rel="stylesheet" href="../static/left_button.css" type="text/css" />
-    <script src="../static/easyui/jquery.min.js" type="text/javascript"></script>
+    <title>Show ChoiceScore</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <link rel="stylesheet" href="/static/exams.css" type="text/css">
+    <link rel="stylesheet" href="/static/subjectbox.css" type="text/css">
+    <link rel="stylesheet" href="/static/left_button.css" type="text/css">
+    <link rel="stylesheet" href="../static/exams.css" type="text/css">
+    <link rel="stylesheet" href="../static/subjectbox.css" type="text/css">
+    <link rel="stylesheet" href="../static/left_button.css" type="text/css">
+    <script src="/static/jquery-easyui-1.10.16/jquery.min.js"></script>
 </head>
 
 <body class="body">
-    <div class="cbl">
+    <!-- 左侧导航栏   -->
+
+   <div class="cbl">
         <div class="cblcenter">
             <div class="sign">
-                <em>教师主页</em>
+               <em>教师主页</em>
             </div>
 
             <div class="nav_con">
-                <button id="info">个人信息</button>
-                <button id="exam_manage">题库管理</button>
+                <a href="#">个人信息</a>
+                <a href="{{url_for('select_to_mark')}}">题库管理</a>
                 <button id="commit">提交</button>
             </div>
 
+            </div>
+            <div class="copyright">©2023 南开大学  软件工程</div>
         </div>
-        <div class="copyright">©2023 南开大学 软件工程</div>
     </div>
 
+    <div class="content">
 
-    <div class="content" style="padding-left: 40px;">
-       
-        {% if all_subject %}
+
+        {% if all_choice %}
             <!-- 如果all_choice不为空，才显示标题 -->
-            <div class="tittlebar" style="margin-top: 20px;">
+            <div class="tittlebar">
                 <!-- ⅡⅢⅣ -->
-                <span class="part-name">Part Ⅱ &emsp; 主观作答题</span>
+                <span class="part-name">自动阅卷 &emsp; 单选题得分统计</span>
                 <div class="line" style="margin-bottom: 10px;"></div>
             </div>
         {% endif %}
-        {% for question in all_subject %}
-        <div class="question_S">
-            <input type="text" name="id" style="display: none;" value="{{question.ID}}">
-            <input type="text" name="score" style="display: none;" value="{{question.score}}">
-            <input type="text" name="stem" style="display: none;" value="{{question.question_stem}}">
-            <span class="directions">
-                {{question.ID}}. ({{question.score}}分)
-            </span>
-                {{question.question_stem}}
-            <span style="font-weight: bold;">
 
-            </span>
-            <textarea id="correct_input"  form="sending" class="input-text"placeholder="Write down some amazing sentences."></textarea>
+        <div class="questionbox">
+            <div class="line"></div>
+            <div class="list">
+                <span class="column" style="width:200;">单选题号</span>
+                <span class="column" style="width:200;">学生作答</span>
+                <span class="column" style="width:200;">正确答案</span>
+                <span class="column" style="width:200;">分值</span>
+                <span class="column" style="width:200;">得分情况</span>
+            </div>
+
+            {% for result in all_choice %}
+            <form class="list" id="题库管理*" action="/student/take_exams/report" method="GET">
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="单选题号" style="border:none;height:33px;width:200;"  value="{{result.id}}">
+                </div>
+
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  readonly="readonly" name="学生作答" style="border:none;height:33px;width:200;"  value="{{ result.stu_ans }}">
+                </div>
+
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="正确答案" style="border:none;height:33px;width:200;"  value="{{result.ans}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  readonly="readonly" name="分值" style="border:none;height:33px;width:200;"  value="{{result.score}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    {% if result.stu_ans==result.ans %}
+                    <input  readonly="readonly" name="得分情况" style="border:none;height:33px;width:200;"  value="{{result.score}}">
+                    {% else  %}
+                    <input  readonly="readonly" name="得分情况" style="border:none;height:33px;width:200;"  value="0">
+                    {% endif %}
+
+                </div>
+
+            </form>
+            {% endfor %}
         </div>
+        {% if all_choice %}
+            <!-- 如果all_choice不为空，才显示标题 -->
+            <div class="tittlebar">
+                <!-- ⅡⅢⅣ -->
+                <div class="标签">
+                     <label for="标签1">选择题总分： {{ choicescore }} </label>
+                </div>
+                <div class="line" style="margin-bottom: 10px;"></div>
+            </div>
+        {% endif %}
+
+        <!-- 进行主观题的展示 -->
+        {% if all_subject %}
+            <!-- 如果all_subject不为空，才显示标题 -->
+            <div class="tittlebar">
+                <!-- ⅡⅢⅣ -->
+                <span class="part-name">教师阅卷 &emsp; 主观题评分</span>
+                <div class="line" style="margin-bottom: 10px;"></div>
+            </div>
+        {% endif %}
+
+        
+        {% for result in all_subject %}
+            <div class="subjectbox">
+                <input type="text" name="题号" style="display:none;" value="{{result.id}}">
+                <input type="text" name="满分" style="display:none;" value="{{result.score}}">
+                <p style="margin: none;">{{result.id}}.{{result.stem}} (满分{{result.score}}分)</p>
+
+                <p style="font-size: 20px;">学生答案：</p>
+                <textarea readonly>{{result.ans}}</textarea>
+
+                <div class="mark">
+                    <p style="font-size: 20px;">教师评分：</p>
+                    <input type="text" name="评分" placeholder="请输入评分" value="0" />
+                </div>
+            </div>
         {% endfor %}
     </div>
+
+    <script>
+        const commit_Button = document.getElementById('commit');
+        commit_Button.addEventListener('click', function() {
+            var subjectBoxes = document.getElementsByClassName("subjectbox");
+            let subject_score=0;
+            const formData = new FormData();
+            for (var i = 0; i < subjectBoxes.length; i++) {
+                var subjectBox = subjectBoxes[i];
+                // 获取题目ID
+                var id = subjectBox.querySelector("input[name='题号']").value;
+                //获取总分
+                var full_mark=subjectBox.querySelector("input[name='满分']").value;
+                // 获取教师评分
+                var score = subjectBox.querySelector("input[name='评分']").value;
+                formData.append('主观题'+id+'得分',score)
+                subject_score=subject_score+parseInt(score)
+            }
+            formData.append('主观题总分',subject_score)
+            fetch('/teacher/mark_paper', {
+                method: 'POST',
+                body: formData
+            })
+            .then(Response =>{
+                window.location.href = "{{url_for('select_to_mark')}}";
+            })
+        });
+    </script>
+
+
 </body>
 
-
-<script>
-    // 提交试卷
-    const commit_Button = document.getElementById('commit');
-    // 监听按钮的点击事件
-    commit_Button.addEventListener('click', function() {
-        // 先计算一下客观题的总分
-        const questionContainers_C = document.getElementsByClassName('question'); 
-        const questionContainers_S = document.getElementsByClassName('question_S');
-        let question_num=questionContainers_C.length+questionContainers_S.length;
-        const formData = new FormData();
-        let choice_score=0;
-        for (let i = 0; i < questionContainers_C.length; i++)
-        {
-            let result=''
-            const questionContainer = questionContainers_C[i];
-            //获取ID
-            var questionID = questionContainer.querySelector('input[name="id"]');
-            var ID = questionID.value;
-            result+='选择题编号:'+ID+'\n';
-            //获取答案
-            var answerInput = questionContainer.querySelector('input[name="answer"]');
-            var answer = answerInput.value;
-            result+='标准答案:'+answer+'\n';
-            // 获取 score 值
-            var scoreInput = questionContainer.querySelector('input[name="score"]');
-            var score = scoreInput.value;
-            // 获取选中的复选框值
-            var options = questionContainer.querySelectorAll('input[name="option"]');
-            var selectedOptions = [];
-  
-            for (var j = 0; j < options.length; j++) {
-                var option = options[j];
-    
-                if (option.checked) {
-                    selectedOptions.push(option.value);
-                }
-            }
-            result+='选择答案:'+selectedOptions[0]+'\n';
-            if (selectedOptions[0] ==answer)
-            {
-                choice_score=choice_score+parseInt(score)
-            }
-            formData.append('选择题'+ID+'概述',result)
-        }
-        formData.append('客观题总分', choice_score);
-        for (let i = 0; i < questionContainers_S.length; i++)
-        {
-            let result='';
-            const essayContainer = questionContainers_S[i];
-            //获取主观题ID
-            var questionID = essayContainer.querySelector('input[name="id"]');
-            var ID=questionID.value
-            result+='主观题编号:'+ID+'\n';
-            //获取主观题分数
-            var scoreInput = essayContainer.querySelector('input[name="score"]');
-            var score = scoreInput.value;
-            result+='主观题分数:'+score+'\n';
-            //获取主观题题干内容
-            var queationStem = essayContainer.querySelector('input[name="stem"]');
-            var stem = queationStem.value;
-            result+='主观题题干:'+stem+'\n';
-            // 获取主观题答案内容
-            const textarea = essayContainer.querySelector('textarea');
-            const essayQuestionValue = textarea.value;
-            result+='主观题答案:'+essayQuestionValue+'\n';
-            formData.append('主观题'+ID+'概述',result)
-
-        }
-        
-        var curr_date = new Date();
-        var year = curr_date.getFullYear();
-        var month = (curr_date.getMonth() + 1).toString().padStart(2, '0');
-        var day = curr_date.getDate().toString().padStart(2, '0');
-        var hours = curr_date.getHours().toString().padStart(2, '0');
-        var minutes = curr_date.getMinutes().toString().padStart(2, '0');
-        var seconds = curr_date.getSeconds().toString().padStart(2, '0');
-
-        var datetimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        formData.append('提交时间',datetimeString);
-        fetch('/student/take_exams/settle', {
-            method: 'POST',
-            body: formData
-        })
-        .then(Response =>{
-            window.location.href = "{{url_for('report_card')}}";
-        })
-    });
-</script>
 </html>

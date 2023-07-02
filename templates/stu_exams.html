@@ -60,6 +60,7 @@
         <div style="min-height: 140px;margin:0px 20px 0px 20px;">
             {% for exam in completed_exam %}
                 <a class="testbox">
+                    <input type="text" name="试卷名称" style="display: none;" value="{{exam.paper_name}}">
                     <div style="text-align: center; font-size:32px;font-family: 'Microsoft Yahei UI';padding-bottom: 10px;">{{exam.paper_name}}</div>
                     <div style="text-align: center; font-size:15px;font-family: 'Microsoft Yahei UI';padding-bottom: 3px;">{{exam.paper_description}}</div>
                     <!-- <div style="texenter; font-size:15px;">时长限制:{{exam.time}}分钟</div> -->
@@ -99,6 +100,20 @@
         })
     }
     </script>
+
+    <!-- <script>
+        function findscore_list(container) {
+        var examNameInput = container.querySelector('input[name="试卷名称"]').value;
+        const formData = new FormData();
+        formData.append('试卷名', examNameInput);
+        fetch('/student/take_exams', {
+            method: 'POST',
+            body: formData
+        })
+        .then(Response =>{
+            window.location.href = "{{url_for('take_exams')}}";
+        })
+    </script> -->
 </body>
 
 

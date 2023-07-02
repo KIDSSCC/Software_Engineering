@@ -26,10 +26,9 @@
     <div class="content">
         <a href="{{url_for('teacher_page')}}" id="back">&lt;</a>
         <div class="tittlebar">
-            <span class="tittle">教师管理：选择批阅学生试卷</span>
+            <span class="tittle">教师管理：批阅学生试卷</span>
             <div class="line"></div>
         </div>
-
         <div class="questionbox">
             <label for="待批阅">待批阅</label>
             <!-- 答卷且未完成阅卷 -->
@@ -43,6 +42,7 @@
             {% for stu in already_answer %}
                 {% if stu.total_score==0 %}
                     <form class="list" id="题库管理*" action="/teacher/mark_paper" method="POST">
+                        <input type="text" name="试卷ID" style="display: none;" value="{{stu.paper_id}}">
                         <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
                             <input readonly="readonly" name="学生姓名" style="border:none;height:33px;width:200;"  value="{{stu.name}}">
                         </div>
@@ -116,65 +116,7 @@
 
 
 
-    <script>
-        $(document).ready(function () {
-            $(document).on("click", "button[id][name='operate']", function () {
-                if ($(this).val() != "查看" && $(this).val() != "成绩") {
-                    su = this;
-                    $.post("/operate/{{managetool}}", $(this).parent().parent().serialize() + "&" + this.name + "=" + this.value, function (data, status) {
-                        if ($(su).val() == "更新") {
-                            $(su).parent().nextAll("#result").html(data);
-                        }
-                        else if ($(su).val() == "删除") {
-                            $(su).parent().nextAll("#result").html(data);
-                            if (data != "删除失败") {
-                                ca = $(su).parent().parent()
-                                ca.children().remove()
-                                lll = setInterval(function () {
-                                    if (ca.css("opacity") != 0) {
-                                        ca.css("opacity", ca.css("opacity") - 0.1);
-                                    }
-                                    else if (ca.height() != 0) {
-                                        ca.height(ca.height() - 1);
-                                    }
-                                    else {
-                                        ca.remove();
-                                        clearInterval(lll);
-                                    }
-                                }, 10);
-                            };
-                        }
-                        else if ($(su).val() == "添加" || $(su).val() == "添加并开始") {
-                            if (data != "添加失败") {
-                                $('#insertxy').before(data);
-                                $(su).parent().nextAll("#result").html("添加成功");
-                            }
-                            else { $(su).parent().nextAll("#result").html(data); };
-                        }
-                        else if ($(su).val() == "开始") {
-                            if (data != "操作失败") {
-                                $(su).html("结束");
-                                $(su).val("结束");
-                                $(su).parent().parent().find("[name='状态']").val("正在进行");
-                            };
-                            $(su).parent().nextAll("#result").html(data);
-                        }
-                        else if ($(su).val() == "结束") {
-                            if (data != "操作失败") {
-                                $(su).html("开始");
-                                $(su).val("开始");
-                                $(su).parent().parent().find("[name='状态']").val("已结束");
-                            };
-                            $(su).parent().nextAll("#result").html(data);
-                        };
-                    });
-                }
-                else {
-                    // $(this).parent().parent().submit();
-                };
-            });
-        });
-    </script>
+    
 </body>
 
 </html>

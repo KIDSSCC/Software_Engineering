@@ -79,6 +79,7 @@ exam_time = None
 curr_choice_score = None
 
 paper_for_student = None
+curr_mark_paper=None
 
 
 all_choice = []
@@ -379,7 +380,6 @@ def take_exams():
         return '/student/take_exams'
         # return render_template('take_exams.html',all_choice=all_choice,all_subject=all_subject,time=paper.time)
     elif request.method == 'GET':
-
         return render_template('take_exams.html', all_choice=all_choice, all_subject=all_subject,
                                time=str(paper_for_student.time))
 
@@ -396,7 +396,8 @@ def settleAccount():
         data_dict[key] = data.get(key)
         if key[:3]=='选择题':
             ID = data[key].split("选择题编号:")[1].split("标准答案:")[0].strip()
-            stuchoice = data[key].split("选择答案:")[1].strip()
+            # stuchoice = data[key].split("选择答案:")[1].strip()
+            stuchoice = data[key].split("选择答案:")[1].split("分值:")[0].strip()
             stu_ans[ID]=stuchoice
 
     #print(stuans)
@@ -417,7 +418,6 @@ def settleAccount():
 
 @app.route('/student/take_exams/report',methods=['GET'])
 def report_card():
-
     return render_template('show_choicescore.html',all_choice=all_choice,stu_ans=stu_ans,stu_choicescore=stu_choicescore)
 
 @app.route('/changepwd', methods=['GET', 'POST'])
@@ -433,7 +433,6 @@ def change_pwd():
         ).first()
         if request.method == 'GET':
             u_type = user_info.user_type
-            print(u_type)
             if u_type == 0:
                 return render_template('stu_changepwd.html', username=user_info.name)
             elif u_type == 1:
@@ -600,25 +599,89 @@ def select_student():
     not_answer_stu=[]
     for item in already_answer:
         name=User_info.query.filter(User_info.user_type==0,User_info.account==item.student).first().name
-        answer_stu.append(student_answer_brief(name,item.submission_time,item.choice_score,item.subject_score,item.total_score))
+        answer_stu.append(student_answer_brief(data,name,item.submission_time,item.choice_score,item.subject_score,item.total_score))
     for item in not_answer:
         name=User_info.query.filter(User_info.user_type==0,User_info.account==item.student).first().name
         not_answer_stu.append(name)
-
-    print(len(answer_stu))
-    for stu in answer_stu:
-        print(stu.total_score)
     return render_template('select_student.html',already_answer=answer_stu,not_answer=not_answer_stu)
 
 @app.route('/teacher/mark_paper',methods=['POST'])
 def mark_paper():
+    if request.form.get('主观题总分') is None:
+        # 是选择了学生进入当前的页面，提供学生的试卷供教师进行评阅
+        global curr_mark_paper
+        curr_mark_paper=request.form
+        # 根据试卷ID查一下试卷名，以确定最终的路径
+        paper_id=curr_mark_paper.get('试卷ID')
+        exam_name=Published_paper.query.filter(Published_paper.id==paper_id).first().paper_name
+        # 需要根据学生姓名查一下学生账号
+        name=curr_mark_paper.get('学生姓名')
+        account=User_info.query.filter(User_info.name==name).first().account
+        # 形成最终的路径
+        path='stu'+account+'_'+exam_name+'.json'
 
-    return render_template('mark_paper.html')
+        choice,subject,choicescore=json2ans(path)
+        return render_template('mark_paper.html',all_choice=choice,all_subject=subject,choicescore=choicescore)
+    else:
+        # 教师提交了评阅结果
+        print(request.form.get('主观题总分'))
+        paper_id=curr_mark_paper.get('试卷ID')
+        name = curr_mark_paper.get('学生姓名')
+        account = User_info.query.filter(User_info.name == name).first().account
+        target_entry=ExamList.query.filter(ExamList.student==account,ExamList.paper==paper_id).first()
+        target_entry.subject_score=int(request.form.get('主观题总分'))
+        target_entry.total_score=target_entry.choice_score+target_entry.subject_score
+        db.session.commit()
+        # 更新json数据：存储键值对：每一道主观题：主观题对应的得分
+        data_dict=dict()
+        for key,value in request.form.items():
+            if key !='主观题总分':
+                data_dict[key]=value
+        exam_name=Published_paper.query.filter(Published_paper.id==paper_id).first().paper_name
+        path='stu'+account+'_'+exam_name+'.json'
+        saveSubjectScore(data_dict,path)
+        return 'here'
+
+@app.route('/student/scores')
+def stu_scores():
+    # 学生选择进行考试
+    completed_exam = ExamList.query.filter(ExamList.student == curr_user.account, ExamList.choice_score != 0).all()
+    completed = []
+    for item in completed_exam:
+        completed.append(Published_paper.query.filter(Published_paper.id == item.paper).first())
+    return render_template('stu_scores.html', completed_exam=completed)
+
+
+all_choice_for_list=None
+all_subject_for_list=None
+total_choice_score=0
+@app.route('/student/getscorelist',methods=['GET', 'POST'])
+def stu_getscorelist():
+
+    if request.method=='POST':
+        examname=request.form.get('试卷名')
+        #print(examname)
+        useraccount = curr_user.account
+        path = 'stu' + useraccount + '_' + examname + '.json'
+        #print(path)
+        # all_choice1, all_subject1,choice_score= json2ans(path)
+        global all_choice_for_list,all_subject_for_list,total_choice_score
+        all_choice_for_list,all_subject_for_list,total_choice_score=json2ans(path)
+        for item in all_choice_for_list:
+            item.print()
+        for item in all_subject_for_list:
+            item.print()
+        print('主观总分',total_choice_score)
+        return 'here'
+        # return render_template('show_allscore.html',all_choice1=all_choice_for_list)
+
+    elif request.method=='GET':
+        return render_template('show_allscore.html',all_choice1=all_choice_for_list)
 
 
 if __name__ == '__main__':
     with app.app_context():
-        db.drop_all()
+        # db.drop_all()
         db.create_all()
 
         # if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):

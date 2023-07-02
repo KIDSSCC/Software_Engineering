@@ -216,6 +216,8 @@
             {
                 choice_score=choice_score+parseInt(score)
             }
+
+            result+='分值:'+score+'\n';
             formData.append('选择题'+ID+'概述',result)
         }
         formData.append('客观题总分', choice_score);

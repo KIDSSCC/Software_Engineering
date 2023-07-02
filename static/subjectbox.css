@@ -1,0 +1,27 @@
+/* 在教室阅卷中展示主观题区域的样式 */
+.subjectbox {
+    margin-left: 30px;
+}
+
+.subjectbox textarea{
+    margin-left: 10px;
+    width: 1200px;
+    height: 300px;
+    font-size: 16px;
+}
+
+.subjectbox p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.mark{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    display: flex;
+}
+.mark input{
+    height: 30px;
+    margin-top: 10px;
+}
