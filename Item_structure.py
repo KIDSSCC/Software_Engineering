@@ -33,6 +33,21 @@ class subject_Item():
         print("Score:", self.score)
 
 
+class student_answer_brief:
+    def __init__(self,name,time,choice_score,subject_score=0,total_score=0):
+        self.name=name
+        self.time=time
+        self.choice_score=choice_score
+        self.subject_score=subject_score
+        self.total_score=total_score
+    def print(self):
+        print("name:",self.name)
+        print("time:",self.time)
+        print("choice_score",self.choice_score)
+        print("subject_score", self.subject_score)
+        print("total_score",self.total_score)
+
+
 def json2class(path='teacher_试卷1.json'):
     all_choice = []
     all_subject = []

@@ -19,15 +19,13 @@
     <div class="cbl">
         <div class="cblcenter">
             <div class="sign">
-                <em>学生主页</em>
+                <em>教师主页</em>
             </div>
 
             <div class="nav_con">
-                <span class="exam-info">剩余时间</span>
-                <div class="exam-info">
-                    <div id="countdown" class="countdown"></div>
-                </div>
-                <button id="commit">交卷</button>
+                <button id="info">个人信息</button>
+                <button id="exam_manage">题库管理</button>
+                <button id="commit">提交</button>
             </div>
 
         </div>
@@ -36,41 +34,7 @@
 
 
     <div class="content" style="padding-left: 40px;">
-        {% if all_choice %}
-            <!-- 如果all_choice不为空，才显示标题 -->
-            <div class="tittlebar">
-                <!-- ⅡⅢⅣ -->
-                <span class="part-name">Part Ⅰ &emsp; 单项选择题</span>
-                <div class="line" style="margin-bottom: 10px;"></div>
-            </div>
-        {% endif %}
-        
-        {% for question in all_choice %}
-            <div class="question">
-                <input type="text" name="id" style="display: none;" value="{{question.ID}}">
-                <input type="text" name="answer" style="display: none;" value="{{question.answer}}">
-                <input type="text" name="score" style="display: none;" value="{{question.score}}">
-                <p>{{question.ID}}.  {{question.question_stem}} &emsp;({{question.score}})</p>
-                <div class="options-group_{{question.ID}}">
-                <label style="width: 100px;">
-                    <input type="checkbox" name="option" value="A" onclick="clearOtherCheckboxes(this, 'options-group_{{question.ID}}')">
-                    {{question.optionA}}
-                </label>
-                <label style="width: 100px;">
-                    <input type="checkbox" name="option" value="B" onclick="clearOtherCheckboxes(this, 'options-group_{{question.ID}}')">
-                    {{question.optionB}}
-                </label>
-                <label style="width: 100px;">
-                    <input type="checkbox" name="option" value="C" onclick="clearOtherCheckboxes(this, 'options-group_{{question.ID}}')">
-                    {{question.optionC}}
-                </label>
-                <label style="width: 100px;">
-                    <input type="checkbox" name="option" value="D" onclick="clearOtherCheckboxes(this, 'options-group_{{question.ID}}')">
-                    {{question.optionD}}
-                </label>
-                </div>
-            </div>
-        {% endfor %}
+       
         {% if all_subject %}
             <!-- 如果all_choice不为空，才显示标题 -->
             <div class="tittlebar" style="margin-top: 20px;">
@@ -94,84 +58,8 @@
             <textarea id="correct_input"  form="sending" class="input-text"placeholder="Write down some amazing sentences."></textarea>
         </div>
         {% endfor %}
-
-        <!-- <div class="question">
-            <span class="directions">Directions: </span>For this part, you are allowed 30 mimites to write an essay based on the chart below. You should start your essay with a brief description of the chart and comment on <span style="font-weight: bold;">China's achievements</span> in poverty alleviation. You should write at least <span style="text-decoration:underline;">150</span> words but no more than <span style="text-decoration:underline;">200</span> words.
-            <div class="centerimg"><img src="/static/pic/question.png"></div>
-        </div>
-        
-
-        <div class="input-area" id="input_area" style="height: auto; min-height:104px;">
-            <div class="input-form">
-                <textarea id="correct_input" form="sending" class="input-text"
-                    placeholder="Write down some amazing sentences."></textarea>
-            </div>
-            <script type="text/javascript">
-                var n = $("#correct_input");
-                n.attr({ "data-height": n.height() });
-                n.focus(function () { $("#input_area").addClass("textarea-focus") });
-                n.blur(function () { $("#input_area").removeClass("textarea-focus") });
-                n.on("keyup", function () {
-                    var t = n.attr("data-height"),
-                        e = n, i = e.parents(".input-form"), r = e.parents(".input-area");
-                    i.height(t), e.height(t), r.outerHeight("auto");
-                    var s;
-                    s = $("#correct_input")[0].scrollHeight, $("#correct_input")[0].scrollHeight && parseInt($("#correct_input")[0].scrollHeight, 10) >= t && (i.height($("#correct_input")[0].scrollHeight), e.height(i.height()));
-                    s = s >= 424 ? 424 : s;
-                    i.height(s), e.height(s), r.outerHeight("auto");
-                })
-            </script>
-        </div> -->
     </div>
 </body>
-
-<script>
-    // 点击一个复选框时清除同组的其他框的选中状态
-    function clearOtherCheckboxes(checkbox, groupName) {
-        // 获取当前复选框所在的复选框组
-        var checkboxes = document.querySelectorAll('.' + groupName + ' input[type="checkbox"]');
-  
-        // 遍历复选框组内的复选框
-        checkboxes.forEach(function(element) {
-        // 如果当前复选框不是被点击的复选框，则清除其选中状态
-            if (element !== checkbox) {
-                element.checked = false;
-            }
-        });
-    }
-</script>
-
-<script>
-    // 设置目标日期和时间
-    var targetMinutes = parseInt("{{time}}");;
-    var targetDate = new Date();
-    targetDate.setMinutes(targetDate.getMinutes() + targetMinutes);
-    
-    // 更新倒计时显示的函数
-    function updateCountdown() {
-      var now = new Date(); // 当前日期和时间
-      var diff = Math.floor((targetDate - now) / 1000); // 计算剩余秒数
-
-      // 计算剩余的小时、分钟和秒数
-      var hours = Math.floor(diff / 3600);
-      var minutes = Math.floor((diff % 3600) / 60);
-      var seconds = diff % 60;
-
-      // 格式化倒计时显示
-      var countdownText = hours.toString().padStart(2, "0") + ":" +
-                          minutes.toString().padStart(2, "0") + ":" +
-                          seconds.toString().padStart(2, "0");
-
-      // 将倒计时显示更新到页面上
-      document.getElementById("countdown").textContent = countdownText;
-
-      // 每秒更新倒计时显示
-      setTimeout(updateCountdown, 1000);
-    }
-
-    // 页面加载完成后开始倒计时
-    window.onload = updateCountdown;
-  </script>
 
 
 <script>

@@ -1,10 +1,11 @@
-from flask import Flask,render_template,request,flash,redirect,url_for
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 import json
 from Item_structure import *
 
-app=Flask(__name__)
+app = Flask(__name__)
+
 
 # 全局数据库配置
 class Config:
@@ -12,7 +13,8 @@ class Config:
 
 app.config.from_object(Config)
 app.config['SECRET_KEY'] = b'\xf0?a\x9a\\\xff\xd4;\x0c\xcbHi'
-db=SQLAlchemy(app)
+db = SQLAlchemy(app)
+
 
 # class Role(db.Model):
 #     __tablename__='role'
@@ -67,22 +69,23 @@ class ExamList(db.Model):
     choice_score=db.Column(db.Integer)
     subject_score=db.Column(db.Integer)
     total_score=db.Column(db.Integer)
-
+    submission_time=db.Column(db.String(25))
 
 # 全局变量的声明
-curr_user=None
-paper_name=None
-paper_description=None
-exam_time=None
-curr_choice_score=None
+curr_user = None
+paper_name = None
+paper_description = None
+exam_time = None
+curr_choice_score = None
 
-paper_for_student=None
+paper_for_student = None
 
 
-all_choice=[]
-all_subject=[]
-exam_limit_time=None
-
+all_choice = []
+all_subject = []
+exam_limit_time = None
+stu_ans ={}
+stu_choicescore = 0
 
 
 # @app.route('/index',methods=['GET','POST'])
@@ -231,7 +234,8 @@ def teacher_page():
             db.session.commit()
             return redirect(url_for('teacher_page'))
 
-@app.route('/admin',methods=['GET','POST'])
+
+@app.route('/admin', methods=['GET', 'POST'])
 def admin_page():
     """
     管理员主页
@@ -246,21 +250,21 @@ def admin_page():
             User_info.user_type == curr_user.user_type,
             User_info.account == curr_user.account
         ).first()
-        if request.method=='GET':
-                return render_template(
-                    'Adm_page.html',
-                    username=user_info.name,
-                    account = user_info.account,
-                    name= user_info.name,
-                    email=user_info.email,
-                    telephone=user_info.tele,
-                    id_no=user_info.id_no
-                )
-        elif request.method=='POST':
+        if request.method == 'GET':
+            return render_template(
+                'Adm_page.html',
+                username=user_info.name,
+                account=user_info.account,
+                name=user_info.name,
+                email=user_info.email,
+                telephone=user_info.tele,
+                id_no=user_info.id_no
+            )
+        elif request.method == 'POST':
             # 信息的更新
-            user_info.email=request.form.get('email')
-            user_info.tele=request.form.get('telephone')
-            user_info.id_no=request.form.get('id_no')
+            user_info.email = request.form.get('email')
+            user_info.tele = request.form.get('telephone')
+            user_info.id_no = request.form.get('id_no')
             db.session.add(user_info)
             db.session.commit()
             return redirect(url_for('admin_page'))
@@ -271,16 +275,16 @@ def agreement():
     return render_template('agreement.html')
 
 
-@app.route('/student/select',methods=['GET','POST'])
+@app.route('/student/select', methods=['GET', 'POST'])
 def selectExam():
     if request.method == 'GET':
         results = Published_paper.query.all()
         return render_template('selectExam.html', all_paper=results)
     elif request.method == 'POST':
-        account=curr_user.account
+        account = curr_user.account
         button_id = request.form.get('paper_id')
         # 考试信息表添加新项
-        new_record = ExamList(student=account, paper=button_id,choice_score=0,subject_score=0,total_score=0)
+        new_record = ExamList(student=account, paper=button_id, choice_score=0, subject_score=0, total_score=0)
         db.session.add(new_record)
         db.session.commit()
         # 更新试卷表中的考试人数
@@ -298,42 +302,44 @@ def registration():
 @app.route('/student/exams')
 def stu_exams():
     # 学生选择进行考试
-    uncompleted_exam=ExamList.query.filter(ExamList.student == curr_user.account, ExamList.choice_score == 0).all()
+    uncompleted_exam = ExamList.query.filter(ExamList.student == curr_user.account, ExamList.choice_score == 0).all()
     completed_exam = ExamList.query.filter(ExamList.student == curr_user.account, ExamList.choice_score != 0).all()
-    uncompleted=[]
-    completed=[]
+    uncompleted = []
+    completed = []
     for item in uncompleted_exam:
         uncompleted.append(Published_paper.query.filter(Published_paper.id == item.paper).first())
     for item in completed_exam:
         completed.append(Published_paper.query.filter(Published_paper.id == item.paper).first())
-    return render_template('stu_exams.html',completed_exam=completed,uncompleted_exam=uncompleted)
+    return render_template('stu_exams.html', completed_exam=completed, uncompleted_exam=uncompleted)
 
-@app.route('/teacher/publish',methods=['GET','POST'])
+
+@app.route('/teacher/publish', methods=['GET', 'POST'])
 def tea_publish():
     if request.method == 'GET':
         results = Published_paper.query.all()
-        return render_template('tea_publish.html',all_paper=results)
+        return render_template('tea_publish.html', all_paper=results)
     elif request.method == 'POST':
-        if request.form.get('Add')=='添加':
+        if request.form.get('Add') == '添加':
             # 记录下新添加进来的试卷名以及试卷说明
             global paper_name
             global paper_description
             global exam_time
-            paper_name=request.form.get('试卷名称')
-            paper_description=request.form.get('说明')
-            exam_time=request.form.get('考试时间')
+            paper_name = request.form.get('试卷名称')
+            paper_description = request.form.get('说明')
+            exam_time = request.form.get('考试时间')
             return redirect(url_for('publish_new_paper'))
         else:
             return 'other'
 
-@app.route('/teacher/publish/new_paper',methods=['GET','POST'])
+
+@app.route('/teacher/publish/new_paper', methods=['GET', 'POST'])
 def publish_new_paper():
     if request.method == 'GET':
         return render_template('new_paper.html')
     elif request.method == 'POST':
         # 需要保存试卷信息，确定试卷名
-        useraccount=curr_user.account
-        path=useraccount+'_'+paper_name+'.json'
+        useraccount = curr_user.account
+        path = useraccount + '_' + paper_name + '.json'
         data = request.form
         # 将表单数据转换为字典
         data_dict = {}
@@ -341,11 +347,12 @@ def publish_new_paper():
             data_dict[key] = data.get(key)
 
         # 将字典保存为 JSON 文件
-        with open(path, 'w',encoding='utf-8') as file:
-            json.dump(data_dict, file,ensure_ascii=False)
+        with open(path, 'w', encoding='utf-8') as file:
+            json.dump(data_dict, file, ensure_ascii=False)
 
         # 已经保存了json文件，开始进行数据库的处理
-        user_n = Published_paper(account=useraccount, paper_name=paper_name, paper_description=paper_description, time=exam_time, path=path,Answer_num=0)
+        user_n = Published_paper(account=useraccount, paper_name=paper_name, paper_description=paper_description,
+                                 time=exam_time, path=path, Answer_num=0)
         db.session.add(user_n)
         db.session.commit()
 
@@ -356,47 +363,64 @@ def publish_new_paper():
 def confirm():
     return render_template('confirm.html')
 
-@app.route('/student/take_exams',methods=['GET','POST'])
+
+@app.route('/student/take_exams', methods=['GET', 'POST'])
 def take_exams():
     # 根据post请求中提供的试卷id展示对应的试卷
-    if request.method =='POST':
+    if request.method == 'POST':
         data = request.form.get('试卷id')
         # 先根据id在publish_paper表中查找对应的试卷表项，获取文件路径
         global paper_for_student
         paper_for_student = Published_paper.query.filter_by(id=data).first()
 
-        global all_choice,all_subject
-        all_choice,all_subject=json2class(paper_for_student.path)
+        global all_choice, all_subject
+        all_choice, all_subject = json2class(paper_for_student.path)
         # 向页面中传递信息，包括选择题，主观题，与考试时间
         return '/student/take_exams'
         # return render_template('take_exams.html',all_choice=all_choice,all_subject=all_subject,time=paper.time)
     elif request.method == 'GET':
 
-        return render_template('take_exams.html', all_choice=all_choice, all_subject=all_subject, time=str(paper_for_student.time))
+        return render_template('take_exams.html', all_choice=all_choice, all_subject=all_subject,
+                               time=str(paper_for_student.time))
 
 
-@app.route('/student/take_exams/settle',methods=['POST'])
+@app.route('/student/take_exams/settle', methods=['POST'])
 def settleAccount():
     useraccount = curr_user.account
-    path = 'stu'+useraccount + '_' + paper_for_student.paper_name + '.json'
+    path = 'stu' + useraccount + '_' + paper_for_student.paper_name + '.json'
     data = request.form
     data_dict = {}
+    global stu_ans
+
     for key in data.keys():
         data_dict[key] = data.get(key)
+        if key[:3]=='选择题':
+            ID = data[key].split("选择题编号:")[1].split("标准答案:")[0].strip()
+            stuchoice = data[key].split("选择答案:")[1].strip()
+            stu_ans[ID]=stuchoice
+
+    #print(stuans)
 
     with open(path, 'w', encoding='utf-8') as file:
         json.dump(data_dict, file, ensure_ascii=False)
+
+    global stu_choicescore
+    stu_choicescore = int(data.get('客观题总分'))
     # 进行数据库的处理，更新自动阅卷分数
     entry = ExamList.query.filter_by(student=curr_user.account, paper=paper_for_student.id).first()
     entry.choice_score = int(data.get('客观题总分'))
+    entry.submission_time=data.get('提交时间')
     db.session.commit()
 
     return 'here'
 
 
+@app.route('/student/take_exams/report',methods=['GET'])
+def report_card():
 
+    return render_template('show_choicescore.html',all_choice=all_choice,stu_ans=stu_ans,stu_choicescore=stu_choicescore)
 
-@app.route('/changepwd',methods=['GET','POST'])
+@app.route('/changepwd', methods=['GET', 'POST'])
 def change_pwd():
     if curr_user is None:
         # 未登录状态
@@ -408,14 +432,14 @@ def change_pwd():
             User_info.account == curr_user.account
         ).first()
         if request.method == 'GET':
-            u_type =user_info.user_type
+            u_type = user_info.user_type
             print(u_type)
             if u_type == 0:
-                return render_template('stu_changepwd.html',username=user_info.name)
+                return render_template('stu_changepwd.html', username=user_info.name)
             elif u_type == 1:
-                return render_template('tea_changepwd.html',username=user_info.name)
-            elif u_type== 2:
-                return render_template('adm_changepwd.html',username=user_info.name)
+                return render_template('tea_changepwd.html', username=user_info.name)
+            elif u_type == 2:
+                return render_template('adm_changepwd.html', username=user_info.name)
             return "人员类型不存在！"
         elif request.method == 'POST':
             # 信息的更新
@@ -424,7 +448,7 @@ def change_pwd():
             newpwd = request.form.get('newpwd')
             newpwd1 = request.form.get('newpwd1')
 
-            if dbpwd!= oldpwd:
+            if dbpwd != oldpwd:
                 return "原密码错误"
             elif newpwd == oldpwd:
                 return "新密码不可与原密码一致"
@@ -435,12 +459,13 @@ def change_pwd():
                 db.session.commit()
                 return redirect(url_for('change_pwd'))
 
-@app.route('/forgetpwd',methods=['GET','POST'])
+
+@app.route('/forgetpwd', methods=['GET', 'POST'])
 def forgetpwd():
-    if request.method=='GET':
+    if request.method == 'GET':
         # 注册页面
         return render_template('forgetpwd.html')
-    elif request.method=='POST':
+    elif request.method == 'POST':
         # 提交表单之后，跳转到学生主页
         u_type = request.form.get('type')
         account = request.form.get('account')
@@ -453,26 +478,28 @@ def forgetpwd():
                 return redirect(url_for('student_page'))
             elif u_type == '1':
                 return redirect(url_for('teacher_page'))
-            elif u_type=='2':
+            elif u_type == '2':
                 return redirect(url_for('admin_page'))
         else:
             return '邮箱验证错误'
-        
-@app.route('/admin/user_management',methods=['GET','POST'])
+
+
+@app.route('/admin/user_management', methods=['GET', 'POST'])
 def adm_usermanagement():
     if request.method == 'GET':
         results = User_info.query.all()
-        return render_template('adm_usermanage.html',all_user=results)
+        return render_template('adm_usermanage.html', all_user=results)
     elif request.method == 'POST':
-        if request.form.get('Add')=='添加':
-            type =request.form.get('用户类型')
+        if request.form.get('Add') == '添加':
+            type = request.form.get('用户类型')
             account = request.form.get('用户id')
             name = request.form.get('用户名')
             pwd = request.form.get('密码')
             email = request.form.get('邮箱')
             tele = request.form.get('电话号')
             sfzh = request.form.get('身份证号')
-            user_n = User_info(user_type=type, account=account, name=name,passwd=pwd, email=email,tele=tele,id_no=sfzh)
+            user_n = User_info(user_type=type, account=account, name=name, passwd=pwd, email=email, tele=tele,
+                               id_no=sfzh)
             db.session.add(user_n)
             db.session.commit()
             return redirect(url_for('adm_usermanagement'))
@@ -507,21 +534,23 @@ def adm_usermanagement():
         else:
             return 'other'
 
-@app.route('/admin/exam_management',methods=['GET','POST'])
+
+@app.route('/admin/exam_management', methods=['GET', 'POST'])
 def adm_exammanagement():
     if request.method == 'GET':
         results = Published_paper.query.all()
-        return render_template('adm_exammanage.html',all_exam=results)
+        return render_template('adm_exammanage.html', all_exam=results)
     elif request.method == 'POST':
-        if request.form.get('Add')=='添加':
-            id =request.form.get('试卷id')
+        if request.form.get('Add') == '添加':
+            id = request.form.get('试卷id')
             account = request.form.get('发布教师id')
             name = request.form.get('试卷名称')
             desc = request.form.get('试卷描述')
             path = request.form.get('试卷路径')
             num = request.form.get('考生人数')
 
-            paper = Published_paper(id=id, account=account, paper_name=name,paper_description=desc, path=path,Answer_num=num)
+            paper = Published_paper(id=id, account=account, paper_name=name, paper_description=desc, path=path,
+                                    Answer_num=num)
             db.session.add(paper)
             db.session.commit()
             return redirect(url_for('adm_exammanagement'))
@@ -531,7 +560,7 @@ def adm_exammanagement():
             exam_info = db.session.query(Published_paper).filter(
                 Published_paper.id == id
             ).first()
-            exam_info.account=request.form.get('发布教师id')
+            exam_info.account = request.form.get('发布教师id')
             exam_info.paper_name = request.form.get('试卷名称')
             exam_info.paper_description = request.form.get('试卷描述')
             exam_info.path = request.form.get('试卷路径')
@@ -552,9 +581,44 @@ def adm_exammanagement():
             return redirect(url_for('adm_exammanagement'))
         else:
             return 'other'
-if __name__ =='__main__':
+
+@app.route('/teacher/select_to_mark')
+def select_to_mark():
+    # 需要查询当前教师所发布的所有试卷
+    entries = Published_paper.query.filter_by(account=curr_user.account).all()
+    return render_template('select_to_mark.html',all_paper=entries)
+
+@app.route('/teacher/select_student',methods=['POST'])
+def select_student():
+    # 根据试卷ID查询哪些学生报名了考试，
+    data=request.form.get('试卷ID')
+    # 所有已经答题的学生和报名之后未答题的学生
+    already_answer=ExamList.query.filter(ExamList.paper == data,ExamList.choice_score != 0).all()
+    not_answer=ExamList.query.filter(ExamList.paper == data,ExamList.choice_score == 0).all()
+    # 对于所有已经答题的学生，分为已阅卷和未阅卷
+    answer_stu=[]
+    not_answer_stu=[]
+    for item in already_answer:
+        name=User_info.query.filter(User_info.user_type==0,User_info.account==item.student).first().name
+        answer_stu.append(student_answer_brief(name,item.submission_time,item.choice_score,item.subject_score,item.total_score))
+    for item in not_answer:
+        name=User_info.query.filter(User_info.user_type==0,User_info.account==item.student).first().name
+        not_answer_stu.append(name)
+
+    print(len(answer_stu))
+    for stu in answer_stu:
+        print(stu.total_score)
+    return render_template('select_student.html',already_answer=answer_stu,not_answer=not_answer_stu)
+
+@app.route('/teacher/mark_paper',methods=['POST'])
+def mark_paper():
+
+    return render_template('mark_paper.html')
+
+
+if __name__ == '__main__':
     with app.app_context():
-        # db.drop_all()
+        db.drop_all()
         db.create_all()
 
         # if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):

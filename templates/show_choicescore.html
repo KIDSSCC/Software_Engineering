@@ -1,0 +1,95 @@
+<html>
+
+<head>
+    <title>Show ChoiceScore</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <link rel="stylesheet" href="/static/exams.css" type="text/css">
+    <link rel="stylesheet" href="../static/exams.css" type="text/css">
+    <script src="/static/jquery-easyui-1.10.16/jquery.min.js"></script>
+</head>
+
+<body class="body">
+    <!-- 左侧导航栏   -->
+
+   <div class="cbl">
+        <div class="cblcenter">
+            <div class="sign">
+               <em>学生主页</em>
+            </div>
+
+            <div class="nav_con">
+                <a href="#">个人信息</a>
+                <a href="{{url_for('agreement')}}">报名考试</a>
+                <a href="{{url_for('stu_exams')}}">我的考试</a>
+                <a href="#">成绩查询</a>
+            </div>
+
+            </div>
+            <div class="copyright">©2023 南开大学  软件工程</div>
+        </div>
+    </div>
+
+    <div class="content">
+
+
+        {% if all_choice %}
+            <!-- 如果all_choice不为空，才显示标题 -->
+            <div class="tittlebar">
+                <!-- ⅡⅢⅣ -->
+                <span class="part-name">自动阅卷 &emsp; 单选题得分统计</span>
+                <div class="line" style="margin-bottom: 10px;"></div>
+            </div>
+        {% endif %}
+
+        <div class="questionbox">
+            <div class="line"></div>
+            <div class="list">
+                <span class="column" style="width:200;">单选题号</span>
+                <span class="column" style="width:200;">学生作答</span>
+                <span class="column" style="width:200;">正确答案</span>
+                <span class="column" style="width:200;">分值</span>
+                <span class="column" style="width:200;">得分情况</span>
+            </div>
+
+            {% for result in all_choice %}
+            <form class="list" id="题库管理*" action="/student/take_exams/report" method="GET">
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="单选题号" style="border:none;height:33px;width:200;"  value="{{result.ID}}">
+                </div>
+
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  readonly="readonly" name="学生作答" style="border:none;height:33px;width:200;"  value="{{ stu_ans[result.ID] }}">
+                </div>
+
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input readonly="readonly" name="正确答案" style="border:none;height:33px;width:200;"  value="{{result.answer}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    <input  readonly="readonly" name="分值" style="border:none;height:33px;width:200;"  value="{{result.score}}">
+                </div>
+                <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                    {% if stu_ans[result.ID]==result.answer %}
+                    <input  readonly="readonly" name="得分情况" style="border:none;height:33px;width:200;"  value="{{result.score}}">
+                    {% else  %}
+                    <input  readonly="readonly" name="得分情况" style="border:none;height:33px;width:200;"  value="0">
+                    {% endif %}
+
+                </div>
+
+            </form>
+            {% endfor %}
+        </div>
+        {% if all_choice %}
+            <!-- 如果all_choice不为空，才显示标题 -->
+            <div class="tittlebar">
+                <!-- ⅡⅢⅣ -->
+                <div class="标签">
+                     <label for="标签1">选择题总分： {{ stu_choicescore }} </label>
+                </div>
+                <div class="line" style="margin-bottom: 10px;"></div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
