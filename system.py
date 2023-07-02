@@ -620,7 +620,7 @@ def mark_paper():
         # 形成最终的路径
         path='stu'+account+'_'+exam_name+'.json'
 
-        choice,subject,choicescore=json2ans(path)
+        choice,subject,choicescore,_=json2ans(path)
         return render_template('mark_paper.html',all_choice=choice,all_subject=subject,choicescore=choicescore)
     else:
         # 教师提交了评阅结果
@@ -655,6 +655,7 @@ def stu_scores():
 all_choice_for_list=None
 all_subject_for_list=None
 total_choice_score=0
+total_subject_score=0
 @app.route('/student/getscorelist',methods=['GET', 'POST'])
 def stu_getscorelist():
 
@@ -665,28 +666,19 @@ def stu_getscorelist():
         path = 'stu' + useraccount + '_' + examname + '.json'
         #print(path)
         # all_choice1, all_subject1,choice_score= json2ans(path)
-        global all_choice_for_list,all_subject_for_list,total_choice_score
-        all_choice_for_list,all_subject_for_list,total_choice_score=json2ans(path)
+        global all_choice_for_list,all_subject_for_list,total_choice_score,total_subject_score
+        all_choice_for_list,all_subject_for_list,total_choice_score,total_subject_score=json2ans(path)
         for item in all_choice_for_list:
             item.print()
-        for item in all_subject_for_list:
-            item.print()
-        print('主观总分',total_choice_score)
         return 'here'
         # return render_template('show_allscore.html',all_choice1=all_choice_for_list)
 
     elif request.method=='GET':
-        return render_template('show_allscore.html',all_choice1=all_choice_for_list)
+        return render_template('show_allscore.html',all_choice1=all_choice_for_list,total_choice_score=int(total_choice_score),all_subject_for_list=all_subject_for_list,total_subject_score=total_subject_score)
 
 
 if __name__ == '__main__':
     with app.app_context():
-        # db.drop_all()
+        db.drop_all()
         db.create_all()
-
-        # if db.inspect(db.engine).has_table('user_info') and db.inspect(db.engine).has_table('published_paper'):
-        #     print('已经存在')
-        # else :
-        #     db.drop_all()
-        #     db.create_all()
     app.run()

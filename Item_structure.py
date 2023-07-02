@@ -110,6 +110,7 @@ def json2ans(path):
     all_choice=[]
     all_subject=[]
     stu_choicescore=0
+    stu_subjectscore=0
     with open(path, 'r', encoding='utf-8') as file:
         json_data = json.load(file)
         for key,value in json_data.items():
@@ -133,11 +134,12 @@ def json2ans(path):
                 if value.find("主观题得分") == -1:
                     item=subject_answer(ID,score,stem,ans)
                 else:
-                    getscore=value.split("主观题得分")[1].strip()
+                    getscore=value.split("主观题得分:")[1].strip()
                     item = subject_answer(ID, score, stem, ans,getscore)
+                    stu_subjectscore+=int(getscore)
                 all_subject.append(item)
                 # item.print()
-    return all_choice,all_subject,stu_choicescore
+    return all_choice,all_subject,stu_choicescore,stu_subjectscore
 
 def saveSubjectScore(data_dict,path):
     json_data=None

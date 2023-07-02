@@ -16,10 +16,10 @@
                 <em>学生主页</em>
             </div>
             <div class="nav_con">
-                <a href="#">个人信息</a>
-                <a href="#">报名考试</a>
+                <a href="{{url_for('student_page')}}">个人信息</a>
+                <a href="{{url_for('agreement')}}">报名考试</a>
                 <a href="{{url_for('stu_exams')}}">我的考试</a>
-                <a href="#">成绩查询</a>
+                <a href="{{url_for('stu_scores')}}">成绩查询</a>
             </div>
         </div>
         <div class="copyright">©2023 南开大学 软件工程</div>
@@ -43,7 +43,7 @@
             </div>
 
             {% for result in all_paper %}
-            <form class="list" id="题库管理*" action="/student/select" method="POST">
+            <form class="list" id="{{ result.id }}" action="/student/select" method="POST">
                 <input type="hidden" name="paper_id" value="{{ result.id }}">
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
                     <input readonly="readonly" name="考试名称" style="border:none;height:33px;width:200;"  value="{{result.paper_name}}">
@@ -55,7 +55,7 @@
                     <input readonly="readonly" name="介绍" style="border:none;height:33px;width:250;"  value="{{result.paper_description}}">
                 </div>
                 <div class="column" style="width:250;">
-                    <button  name="Update" class="operater" id="{{result.paper_name}}" value="添加">报名考试</button>
+                    <button  name="Update" class="operater" id="{{result.paper_name}}" value="添加" onclick="ButtonSet(this)">报名考试</button>
                 </div>
                 <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
                     <input readonly="readonly" name="状态"style="border:none;height:33px;width:70;" value="已发布">
@@ -66,7 +66,27 @@
         </div>
 
     </div>
-
+    <script>
+        function ButtonSet(button){
+            event.preventDefault();
+            if(button.innerText=="报名考试")
+            {
+                button.innerText = "取消报名";
+                var curr_form=button.form;
+                var statusInput = curr_form.querySelector("input[name='状态']");
+                statusInput.value="已报名";
+                var paper_id_container=curr_form.querySelector("input[name='paper_id']");
+                var paper_id=paper_id_container.value;
+                const formData = new FormData();
+                formData.append('paper_id',paper_id);
+                fetch('/student/select', {
+                    method: 'POST',
+                    body: formData
+                })
+                // curr_form.submit();
+            }
+        }
+    </script>
 
 
     

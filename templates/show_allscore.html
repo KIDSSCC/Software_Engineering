@@ -18,7 +18,7 @@
             </div>
 
             <div class="nav_con">
-                <a href="#">个人信息</a>
+                <a href="{{url_for('student_page')}}">个人信息</a>
                 <a href="{{url_for('agreement')}}">报名考试</a>
                 <a href="{{url_for('stu_exams')}}">我的考试</a>
                  <a href="{{url_for('stu_scores')}}">成绩查询</a>
@@ -30,13 +30,17 @@
     </div>
 
     <div class="content">
+        <div class="tittlebar">
+                <!-- ⅡⅢⅣ -->
+                <span class="part-name">试卷总分：{{ total_subject_score+total_choice_score }}</span>
+                <div class="line" style="margin-bottom: 10px;"></div>
+            </div>
 
-
-        {% if all_choice %}
+        {% if all_choice1 %}
             <!-- 如果all_choice不为空，才显示标题 -->
             <div class="tittlebar">
                 <!-- ⅡⅢⅣ -->
-                <span class="part-name">自动阅卷 &emsp; 单选题得分统计</span>
+                <span class="part-name">自动阅卷 &emsp; 单选题总分：{{ total_choice_score }}</span>
                 <div class="line" style="margin-bottom: 10px;"></div>
             </div>
         {% endif %}
@@ -79,16 +83,39 @@
             </form>
             {% endfor %}
         </div>
-        {% if all_choice %}
-            <!-- 如果all_choice不为空，才显示标题 -->
+
+
+         {% if all_subject_for_list %}
+            <!-- 如果all_subject_for_list不为空，才显示标题 -->
             <div class="tittlebar">
                 <!-- ⅡⅢⅣ -->
-                <div class="标签">
-                     <label for="标签1">选择题总分： {{ stu_choicescore }} </label>
-                </div>
+                <span class="part-name">教师阅卷 &emsp; 主观题总分：{{ total_subject_score }}</span>
                 <div class="line" style="margin-bottom: 10px;"></div>
             </div>
         {% endif %}
+        <div class="questionbox">
+            <div class="line"></div>
+            <div class="list">
+                <span class="column" style="width:200;">主观题号</span>
+                <span class="column" style="width:200;">分值</span>
+                <span class="column" style="width:200;">得分情况</span>
+            </div>
+            {% for result in all_subject_for_list %}
+                <form class="list" id="题库管理*" action="/student/take_exams/report" method="GET">
+                    <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                        <input readonly="readonly" name="主观题号" style="border:none;height:33px;width:200;"  value="{{result.id}}">
+                    </div>
+
+                    <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                        <input  readonly="readonly" name="分值" style="border:none;height:33px;width:200;"  value="{{result.score}}">
+                    </div>
+                    <div class="column" style="padding-top:0px;padding-bottom:0px;height:34px;">
+                        <input  readonly="readonly" name="得分情况" style="border:none;height:33px;width:200;"  value="{{result.getscore}}">
+                    </div>
+                </form>
+            {% endfor %}
+        </div>
+
     </div>
 </body>
 
