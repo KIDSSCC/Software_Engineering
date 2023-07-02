@@ -1,0 +1,82 @@
+
+<html>
+
+<head>
+    <title>Exam Page</title>
+    <link rel="stylesheet" href="/static/exams.css" type="text/css" />
+    <link rel="stylesheet" href="../static/exams.css" type="text/css" />
+</head>
+
+<body class="body">
+    <div class="cbl">
+        <div class="cblcenter">
+            <div class="sign">
+                学生主页
+            </div>
+
+            <div class="nav_con">
+                <a href="{{url_for('student_page')}}">个人信息</a>
+                <a href="{{url_for('agreement')}}">报名考试</a>
+                <a href="{{url_for('stu_exams')}}">我的考试</a>
+                 <a href="{{url_for('stu_scores')}}">成绩查询</a>
+            </div>
+
+            </div>
+            <div class="copyright">©2023 南开大学  软件工程</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <a href="/admin" id="management" style="display:none;">管理中心</a>
+
+        <div class="tittlebar"><span class="tittle">已完成的考试</span>
+            <div class="line"></div>
+        </div>
+        <div style="min-height: 140px;margin:0px 20px 0px 20px;">
+            {% for exam in completed_exam %}
+                <a class="testbox" onclick="sendPostRequest(this)">
+                    <input type="text" name="试卷名称" style="display: none" value="{{exam.paper_name}}">
+                    <div style="text-align: center; font-size:32px;font-family: 'Microsoft Yahei UI';padding-bottom: 10px;">{{exam.paper_name}}</div>
+                    <div style="text-align: center; font-size:15px;font-family: 'Microsoft Yahei UI';padding-bottom: 3px;">{{exam.paper_description}}</div>
+                    <!-- <div style="texenter; font-size:15px;">时长限制:{{exam.time}}分钟</div> -->
+                </a>
+
+            {% endfor %}
+
+            <!-- <a href="/result/exam1" class="testbox">
+                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">exam1</div>
+                <div style="font-size:15px;margin-top:10px;">答卷时间：Jun-03-2023 15:34:20</div>
+                <div style="font-size:15px;">时长限制：120分钟</div>
+                <div style="font-size:15px;">测试状态：已提交</div>
+            </a>
+
+            <a href="/result/exam2" class="testbox">
+                <div style="text-align: center;font-family: 'Microsoft Yahei UI';">exam2</div>
+                <div style="font-size:15px;margin-top:10px;">答卷时间：Jun-03-2023 15:46:46</div>
+                <div style="font-size:15px;">时长限制：60分钟</div>
+                <div style="font-size:15px;">测试状态：正在进行</div>
+            </a> -->
+
+        </div>
+    </div>
+
+
+    <script>
+        function sendPostRequest(container) {
+        var examNameInput = container.querySelector('input[name="试卷名称"]').value;
+        const formData = new FormData();
+        formData.append('试卷名', examNameInput);
+        fetch('/student/getscorelist', {
+            method: 'POST',
+            body: formData
+        })
+        .then(Response =>{
+            window.location.href = "{{url_for('stu_getscorelist')}}";
+        })
+    }
+    </script>
+
+</body>
+
+
+</html>
